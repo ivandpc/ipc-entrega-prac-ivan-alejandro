@@ -5,30 +5,38 @@
  */
 package javafxmlapplication;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  *
  * @author I y A
  */
 public class FXMLDocumentController implements Initializable {
-    //========================================================
-    // objects defined into FXML file with fx:id 
-    @FXML
-    private Button buttonClick;
-    @FXML
     private Label labelMessage;
+    @FXML
+    private Button registro;
+    @FXML
+    private Label mensaje;
+    @FXML
+    private Button iniciosesion;
     
     //=========================================================
     // event handler, fired when button is clicked or 
     //                      when the button has the focus and enter is pressed
-    @FXML
     private void handleButtonAction(ActionEvent event) {
         labelMessage.setText("Hello, this is your first JavaFX project - IPC");
     }
@@ -39,5 +47,23 @@ public class FXMLDocumentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    
+    private void incioSesion(ActionEvent event) {
+        mensaje.setText("hola");
+    }
+    
+    private Stage stage;
+    private Scene scene;
+    private Parent root;
+    @FXML
+    private void registro(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("Registro.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+    }
+    
     
 }

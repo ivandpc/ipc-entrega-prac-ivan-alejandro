@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.image;
 import model.Acount;
 import model.AcountDAOException;
 
@@ -53,6 +54,10 @@ public class RegistroController implements Initializable {
 
     @FXML
     private void aceptarRegistro(ActionEvent event) throws AcountDAOException, IOException {
+
+        String url = File.separator + "images" + File.separator + "woman.PNG";
+        Image avatar = new Image(new FileInputStream(url));
+        fotos.imageProperty().setValue(new image(new FileInputStream(url)));
         Acount.getInstance().registerUser(nombre.getText(), apellidos.getText(), email.getText(), usuario.getText(), password.getText(), fotos.getImage(), LocalDate.MAX);
     }
 

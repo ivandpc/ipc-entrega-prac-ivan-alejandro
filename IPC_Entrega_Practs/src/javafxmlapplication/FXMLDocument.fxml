@@ -24,8 +24,8 @@
       <Label fx:id="mensaje" text="Bienvenido" />
       <Label text="Usuario:" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
       <Label text="Contraseña:" GridPane.halignment="RIGHT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <PasswordField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <TextField fx:id="usertext" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <PasswordField fx:id="passwordtext" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Button fx:id="registro" mnemonicParsing="false" onAction="#registro" text="Registro" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <Button fx:id="iniciosesion" mnemonicParsing="false" onAction="#incioSesion" text="IniciarSesion" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.valignment="TOP" />
    </children>

@@ -19,7 +19,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Acount;
+import model.AcountDAOException;
 
 /**
  *
@@ -33,6 +37,10 @@ public class FXMLDocumentController implements Initializable {
     private Label mensaje;
     @FXML
     private Button iniciosesion;
+    @FXML
+    private TextField usertext;
+    @FXML
+    private PasswordField passwordtext;
     
     //=========================================================
     // event handler, fired when button is clicked or 
@@ -50,8 +58,10 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     
-    private void incioSesion(ActionEvent event) {
-        mensaje.setText("hola");
+    private void incioSesion(ActionEvent event) throws AcountDAOException, IOException {
+        if(Acount.getInstance().logInUserByCredentials(usertext.getText(),passwordtext.getText())){
+            System.out.print("Todo bien");
+        }
     }
     
     private Stage stage;

@@ -30,6 +30,7 @@ import model.AcountDAOException;
  * @author I y A
  */
 public class FXMLDocumentController implements Initializable {
+
     private Label labelMessage;
     @FXML
     private Button registro;
@@ -41,39 +42,42 @@ public class FXMLDocumentController implements Initializable {
     private TextField usertext;
     @FXML
     private PasswordField passwordtext;
-    
+
     //=========================================================
     // event handler, fired when button is clicked or 
     //                      when the button has the focus and enter is pressed
     private void handleButtonAction(ActionEvent event) {
         labelMessage.setText("Hello, this is your first JavaFX project - IPC");
     }
-    
+
     //=========================================================
     // you must initialize here all related with the object 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
-    
+
     private void incioSesion(ActionEvent event) throws AcountDAOException, IOException {
-        if(Acount.getInstance().logInUserByCredentials(usertext.getText(),passwordtext.getText())){
-            System.out.print("Todo bien");
+        if (Acount.getInstance().logInUserByCredentials(usertext.getText(), passwordtext.getText())) {
+            Parent root = FXMLLoader.load(getClass().getResource("MainApp.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
         }
     }
-    
+
     private Stage stage;
     private Scene scene;
     private Parent root;
+
     @FXML
     private void registro(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("registro.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
     }
-    
-    
+
 }

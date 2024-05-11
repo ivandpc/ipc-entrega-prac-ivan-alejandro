@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package javafxmlapplication;
+package javafxmlapplication.controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -56,8 +56,6 @@ public class MainAppController implements Initializable {
     private TableColumn<?, ?> fecha;
     @FXML
     private Button add;
-    @FXML
-    private Button add1;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -80,10 +78,6 @@ public class MainAppController implements Initializable {
         }
     }
 
-    @FXML
-    private void newCategory(ActionEvent event) {
-        //Acount.getInstance().registerCategory(name, description)
-    }
 
     @FXML
     private void newCharge(ActionEvent event) throws IOException {

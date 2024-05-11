@@ -37,7 +37,7 @@ import javafx.stage.Stage;
  *
  * @author ivand
  */
-public class RegistroController implements Initializable {
+public class PerfilController implements Initializable {
 
     @FXML
     private Button registroboton;
@@ -59,12 +59,13 @@ public class RegistroController implements Initializable {
     private Label error;
     @FXML
     private GridPane fondo;
-    @FXML
-    private Button cancelarBotton;
-    
+
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        // TODO
     }
     private Stage stage;
     private Scene scene;
@@ -94,44 +95,32 @@ public class RegistroController implements Initializable {
         if (password.getText().isBlank()) {
             error.setText("Debes introducir una contraseña");
         }
-        
+
         if (nombre.getText() != null || apellidos.getText() != null || email.getText() != null || usuario.getText() != null || password.getText() != null || avatar != null || LocalDate.now() != null) {
-            try {
-                if (Acount.getInstance().registerUser(nombre.getText(), apellidos.getText(), email.getText(), usuario.getText(), password.getText(), avatar, LocalDate.now())) {
-                    Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
-                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    scene = new Scene(root);
-                    stage.setScene(scene);
-                }
-            } catch (AcountDAOException e) {
-                error.setText("El usuario ya existe");
+            if (Acount.getInstance().registerUser(nombre.getText(), apellidos.getText(), email.getText(), usuario.getText(), password.getText(), avatar, LocalDate.now())) {
+                Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                scene = new Scene(root);
+                stage.setScene(scene);
             }
         }
     }
-    private File file;
+    private File f;
     private Image avatar;
 
     @FXML
     private void singleFileChooser(ActionEvent event) throws FileNotFoundException {
         FileChooser fc = new FileChooser();
-        file = fc.showOpenDialog(null);
-        String url = file.getAbsolutePath();
+        f = fc.showOpenDialog(null);
+        String url = f.getAbsolutePath();
         avatar = new Image(new FileInputStream(url));
         perfil.setImage(avatar);
-        
+
     }
 
     @FXML
     private void fondoClicked(MouseEvent event) {
         fondo.requestFocus();
-    }
-
-    @FXML
-    private void cancelar(ActionEvent event) throws IOException{
-        Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
     }
 
 }

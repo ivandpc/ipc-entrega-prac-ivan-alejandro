@@ -81,7 +81,7 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void newCharge(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("addGasto.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/addGasto.fxml"));
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setTitle("Gasto");

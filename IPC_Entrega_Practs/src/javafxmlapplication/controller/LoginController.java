@@ -84,7 +84,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void incioSesion(ActionEvent event) throws AcountDAOException, IOException {
+    private void inicioSesion(ActionEvent event) throws AcountDAOException, IOException {
         if (Acount.getInstance().logInUserByCredentials(userText.getText(), passwordText.getText())) {
             Parent root = FXMLLoader.load(getClass().getResource("../view/mainApp.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -107,5 +107,17 @@ public class LoginController implements Initializable {
     private void fondoClicked(MouseEvent event) {
         fondo.requestFocus();
     }
+
+    @FXML
+    private void nextUser(ActionEvent event) {
+        if (!userText.getText().isBlank()) passwordText.requestFocus();
+    }
+
+    @FXML
+    private void nextPassword(ActionEvent event) throws AcountDAOException, IOException {
+        if (!passwordText.getText().isBlank()) inicioSesion(event);
+    }
+
+    
     
 }

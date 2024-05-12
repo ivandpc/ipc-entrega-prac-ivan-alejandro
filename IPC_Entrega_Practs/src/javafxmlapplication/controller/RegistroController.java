@@ -61,6 +61,8 @@ public class RegistroController implements Initializable {
     private GridPane fondo;
     @FXML
     private Button cancelarBotton;
+    @FXML
+    private PasswordField password2;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -72,30 +74,17 @@ public class RegistroController implements Initializable {
 
     @FXML
     private void aceptarRegistro(ActionEvent event) throws AcountDAOException, IOException {
-        if (avatar == null) {
-            error.setText("Debes elegir una foto de perfil valida");
-        }
         if (nombre.getText().isBlank()) {
             error.setText("Debes introducir tu nombre.");
-        }
-
-        if (apellidos.getText().isBlank()) {
+        } else if (apellidos.getText().isBlank()) {
             error.setText("Debes introducir tus apellidos.");
-        }
-
-        if (email.getText().isBlank()) {
+        } else if (email.getText().isBlank()) {
             error.setText("Debes introducir tu email.");
-        }
-
-        if (usuario.getText().isBlank()) {
+        } else if (usuario.getText().isBlank()) {
             error.setText("Debes introducir un nombre de usuario.");
-        }
-
-        if (password.getText().isBlank()) {
-            error.setText("Debes introducir una contraseña");
-        }
-        
-        if (nombre.getText() != null || apellidos.getText() != null || email.getText() != null || usuario.getText() != null || password.getText() != null || avatar != null || LocalDate.now() != null) {
+        } else if (!password.getText().equals(password2.getText())) {
+            error.setText("Las contraseñas deben ser iguales");
+        } else if (nombre.getText() != null || apellidos.getText() != null || email.getText() != null || usuario.getText() != null || password.getText() != null || LocalDate.now() != null) {
             try {
                 if (Acount.getInstance().registerUser(nombre.getText(), apellidos.getText(), email.getText(), usuario.getText(), password.getText(), avatar, LocalDate.now())) {
                     Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
@@ -105,6 +94,7 @@ public class RegistroController implements Initializable {
                 }
             } catch (AcountDAOException e) {
                 error.setText("El usuario ya existe");
+                System.err.println(e);
             }
         }
     }
@@ -132,6 +122,36 @@ public class RegistroController implements Initializable {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
+    }
+
+    @FXML
+    private void nextNombre(ActionEvent event) {
+        if (!nombre.getText().isBlank()) apellidos.requestFocus();
+    }
+
+    @FXML
+    private void nextApellidos(ActionEvent event) {
+        if (!apellidos.getText().isBlank()) email.requestFocus();
+    }
+
+    @FXML
+    private void nextEmail(ActionEvent event) {
+        if (!email.getText().isBlank()) usuario.requestFocus();
+    }
+
+    @FXML
+    private void nextUser(ActionEvent event) {
+        if (!usuario.getText().isBlank()) password.requestFocus();
+    }
+
+    @FXML
+    private void nextPassword(ActionEvent event) {
+        if (!usuario.getText().isBlank()) password2.requestFocus();
+    }
+
+    @FXML
+    private void nextPassword2(ActionEvent event) throws AcountDAOException, IOException {
+        if (!password.getText().isBlank()) aceptarRegistro(event);
     }
 
 }

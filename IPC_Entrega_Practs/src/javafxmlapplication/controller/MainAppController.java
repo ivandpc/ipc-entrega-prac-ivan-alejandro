@@ -59,8 +59,6 @@ public class MainAppController implements Initializable {
     @FXML
     private TableColumn<?, ?> fecha;
     @FXML
-    private Button add;
-    @FXML
     private MenuButton toolbarUsername;
     @FXML
     private ImageView toolbarImage;
@@ -77,31 +75,19 @@ public class MainAppController implements Initializable {
             toolbarImage.setImage(user.getImage());
             toolbarUsername.setText(user.getNickName());
             
-            categoria.setCellValueFactory(new PropertyValueFactory<>("nameCategory"));
+            categoria.setCellValueFactory(new PropertyValueFactory<>("Category"));
             fecha.setCellValueFactory(new PropertyValueFactory<>("date"));
             precio.setCellValueFactory(new PropertyValueFactory<>("cost"));
             unidades.setCellValueFactory(new PropertyValueFactory<>("units"));
             nombre.setCellValueFactory(new PropertyValueFactory<>("name"));
             
             List<Charge> charges = acount.getUserCharges();
-            int startIndex = Math.max(0, charges.size() - 4);
-            List<Charge> ultimosCargos = charges.subList(startIndex, charges.size());
-            tabla.setItems(FXCollections.observableList(ultimosCargos));
+            tabla.setItems(FXCollections.observableList(charges));
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         } catch (IOException ex) {
             System.err.println(ex);
         }
-    }
-
-    @FXML
-    private void newCharge(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("../view/addGasto.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setTitle("Gasto");
-        stage.setScene(scene);
-        stage.show();
     }
 
     @FXML
@@ -122,6 +108,26 @@ public class MainAppController implements Initializable {
         stage.setScene(scene);
         stage.show();
         tabla.getScene().getWindow().hide();
+    }
+
+    @FXML
+    private void nuevaCategoria(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("../view/NuevaCategoria.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Gasto");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void nuevoGasto(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("../view/addGasto.fxml"));
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setTitle("Gasto");
+        stage.setScene(scene);
+        stage.show();
     }
 
 }

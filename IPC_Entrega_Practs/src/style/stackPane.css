@@ -1,0 +1,6 @@
+.stackPane {
+    -fx-background-color: white;
+    -fx-border-color: #b8b8b8;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+}

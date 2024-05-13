@@ -22,11 +22,18 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import model.Acount;
 import model.Category;
@@ -51,10 +58,6 @@ public class MainAppController implements Initializable {
     private TableColumn<Charge, Double> precio;
     @FXML
     private TableView<Charge> tabla;
-
-    /**
-     * Initializes the controller class.
-     */
     private ObservableList<Charge> datos = null; // Colección vinculada a la vista.
     @FXML
     private TableColumn<?, ?> fecha;
@@ -65,6 +68,38 @@ public class MainAppController implements Initializable {
     
     private Acount acount = null;
     private User user = null;
+    @FXML
+    private TextField buscarText;
+    @FXML
+    private Button filtroButton;
+    @FXML
+    private StackPane nuevoGastoPanel;
+    @FXML
+    private TextField descripcion;
+    @FXML
+    private ChoiceBox<?> categoria1;
+    @FXML
+    private Button añadirCategoriaButton;
+    @FXML
+    private TextField coste;
+    @FXML
+    private TextField unidades1;
+    @FXML
+    private DatePicker fecha1;
+    @FXML
+    private Button añadirGastoButton;
+    @FXML
+    private StackPane añadirCategoriaPanel;
+    @FXML
+    private TextField nombreCategoria;
+    @FXML
+    private TextField descripcionCategoria;
+    @FXML
+    private Button confirmarCategoriaButton;
+    @FXML
+    private StackPane filtroPanel;
+    @FXML
+    private Button factura;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -109,25 +144,73 @@ public class MainAppController implements Initializable {
         stage.show();
         tabla.getScene().getWindow().hide();
     }
-
-    @FXML
-    private void nuevaCategoria(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("../view/NuevaCategoria.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setTitle("Gasto");
-        stage.setScene(scene);
-        stage.show();
-    }
-
+    
+    private boolean nuevoGasto = false;
     @FXML
     private void nuevoGasto(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("../view/addGasto.fxml"));
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setTitle("Gasto");
-        stage.setScene(scene);
-        stage.show();
+        nuevoGasto = !nuevoGasto;
+        nuevoGastoPanel.setVisible(nuevoGasto);
+        añadirCategoriaPanel.setVisible(false);
     }
+    
+    private boolean filtro = false;
+    @FXML
+    private void filtro(ActionEvent event) {
+        filtro = !filtro;
+        filtroPanel.setVisible(filtro);
+    }
+
+    private boolean añadirCategoria = false;
+    @FXML
+    private void añadirCategoria(ActionEvent event) {
+        añadirCategoria = !añadirCategoria;
+        añadirCategoriaPanel.setVisible(añadirCategoria);
+    }
+    
+    @FXML
+    private void confirmarCategoria(ActionEvent event) {
+        
+    }
+    
+    @FXML
+    private void añadirFactura(ActionEvent event) {
+        
+    }
+    
+    @FXML
+    private void añadirGasto(ActionEvent event) {
+        
+    }
+    
+    @FXML
+    private void nextNombre(ActionEvent event) {
+    }
+    @FXML
+    private void nextDescripcion(ActionEvent event) {
+    }
+    @FXML
+    private void nextCoste(ActionEvent event) {
+    }
+    @FXML
+    private void nextUnidades(ActionEvent event) {
+    }
+    @FXML
+    private void nextFecha(ActionEvent event) {
+    }
+    @FXML
+    private void nextNombreCategoria(ActionEvent event) {
+    }
+    @FXML
+    private void nextDescripcionCategoria(ActionEvent event) {
+    }
+    
+    @FXML
+    private void nuevoGastoPanelClicked(MouseEvent event) {
+        nuevoGastoPanel.requestFocus();
+        añadirCategoriaPanel.setVisible(false);
+    }
+
+    
+
 
 }

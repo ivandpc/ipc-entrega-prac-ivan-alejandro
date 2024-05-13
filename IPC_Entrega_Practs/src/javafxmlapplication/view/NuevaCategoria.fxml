@@ -1,42 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.NuevaCategoriaController">
    <children>
-      <BorderPane prefHeight="410.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+      <StackPane fx:id="añadirCategoriaPanel1" layoutX="1088.0" layoutY="75.0" styleClass="stackPane" stylesheets="@../../style/stackPane.css">
+         <children>
+            <GridPane>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+         </children>
+      </StackPane>
+      <StackPane fx:id="añadirCategoriaPanel" layoutX="577.0" layoutY="190.0" styleClass="stackPane" stylesheets="@../../style/stackPane.css">
+         <children>
+            <GridPane hgap="5.0" vgap="5.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="256.0" spacing="5.0">
-                     <children>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre" />
-                        <TextField fx:id="nombre" onAction="#nextUser" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER" spacing="5.0">
-                     <children>
-                        <Label alignment="CENTER_RIGHT" text="Descripcion" />
-                        <TextField fx:id="descripcion" onAction="#nextUser" />
-                     </children>
-                  </HBox>
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre" />
+                  <TextField fx:id="nombreCategoria" onAction="#nextNombreCategoria" GridPane.columnIndex="1" />
+                  <Label alignment="CENTER_RIGHT" text="Descripcion" GridPane.rowIndex="1" />
+                  <TextField fx:id="descripcionCategoria" onAction="#nextDescripcionCategoria" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" prefHeight="15.0" prefWidth="83.0" text="Confirmar" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
-            </VBox>
-         </center>
-         <bottom>
-            <ButtonBar BorderPane.alignment="CENTER">
-               <buttons>
-                  <Button fx:id="conf" mnemonicParsing="false" onAction="#confirmar" prefHeight="15.0" prefWidth="83.0" text="Confirmar" />
-               </buttons>
-            </ButtonBar>
-         </bottom>
-      </BorderPane>
+               <StackPane.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </StackPane.margin>
+            </GridPane>
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

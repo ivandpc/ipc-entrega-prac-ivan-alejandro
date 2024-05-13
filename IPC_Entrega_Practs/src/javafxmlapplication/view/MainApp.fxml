@@ -105,7 +105,7 @@
                                     <TextField fx:id="descripcion" onAction="#nextDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                        <children>
-                                          <ChoiceBox fx:id="categoria1" prefWidth="150.0" />
+                                          <ChoiceBox fx:id="categoriaText" prefWidth="150.0" />
                                           <Button fx:id="añadirCategoriaButton" mnemonicParsing="false" onAction="#añadirCategoria" text="Añadir categoria" />
                                        </children>
                                     </HBox>
@@ -118,11 +118,16 @@
                                     <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
                                     <Label alignment="CENTER_RIGHT" text="Unidades:" GridPane.rowIndex="4" />
                                     <Label alignment="CENTER_RIGHT" text="Fecha:" GridPane.rowIndex="5" />
-                                    <Button fx:id="añadirGastoButton" mnemonicParsing="false" onAction="#añadirGasto" text="Añadir Gasto" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                       <children>
+                                          <Button fx:id="añadirGastoButton" mnemonicParsing="false" onAction="#añadirGasto" text="Añadir Gasto" />
+                                          <Text fx:id="errorGasto" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
+                                       </children>
+                                    </HBox>
                                     <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
-                                    <Button fx:id="factura" mnemonicParsing="false" onAction="#añadirFactura" text="Añadir" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                    <Button fx:id="facturaButton" mnemonicParsing="false" onAction="#añadirFactura" text="Añadir" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                        <graphic>
-                                          <ImageView pickOnBounds="true" preserveRatio="true" />
+                                          <ImageView fx:id="factura" pickOnBounds="true" preserveRatio="true" />
                                        </graphic>
                                     </Button>
                                  </children>
@@ -132,7 +137,7 @@
                               </GridPane>
                            </children>
                         </StackPane>
-                        <StackPane fx:id="añadirCategoriaPanel" layoutX="271.0" layoutY="121.0" styleClass="stackPane" stylesheets="@../../style/stackPane.css" visible="false">
+                        <StackPane fx:id="añadirCategoriaPanel" layoutX="271.0" layoutY="121.0" styleClass="stackPane" stylesheets="@../../style/stackPane.css">
                            <children>
                               <GridPane hgap="5.0" vgap="5.0">
                                  <columnConstraints>
@@ -149,7 +154,12 @@
                                     <TextField fx:id="nombreCategoria" onAction="#nextNombreCategoria" GridPane.columnIndex="1" />
                                     <Label alignment="CENTER_RIGHT" text="Descripcion" GridPane.rowIndex="1" />
                                     <TextField fx:id="descripcionCategoria" onAction="#nextDescripcionCategoria" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" prefHeight="15.0" prefWidth="83.0" text="Confirmar" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <children>
+                                          <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" prefHeight="15.0" prefWidth="83.0" text="Confirmar" />
+                                          <Text fx:id="errorCategoria" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
+                                       </children>
+                                    </HBox>
                                  </children>
                                  <StackPane.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

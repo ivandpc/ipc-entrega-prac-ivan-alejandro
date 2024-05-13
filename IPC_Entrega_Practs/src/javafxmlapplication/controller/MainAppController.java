@@ -4,9 +4,13 @@
  */
 package javafxmlapplication.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -24,16 +28,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Acount;
 import model.Category;
@@ -77,8 +86,6 @@ public class MainAppController implements Initializable {
     @FXML
     private TextField descripcion;
     @FXML
-    private ChoiceBox<?> categoria1;
-    @FXML
     private Button añadirCategoriaButton;
     @FXML
     private TextField coste;
@@ -99,7 +106,26 @@ public class MainAppController implements Initializable {
     @FXML
     private StackPane filtroPanel;
     @FXML
-    private Button factura;
+    private ImageView factura;
+    @FXML
+    private TextField nombreText;
+    @FXML
+    private Button facturaButton;
+    @FXML
+    private Text errorGasto;
+    @FXML
+    private ChoiceBox<String> categoriaText;
+    @FXML
+    private Text errorCategoria;
+    
+    private void actualizarCategorias() throws AcountDAOException {
+        List<Category> categories = acount.getUserCategories();
+            List<String> cat = new ArrayList<>();
+            for (Category c : categories) {
+                cat.add(c.getName());
+            }
+            categoriaText.setItems(FXCollections.observableArrayList(cat));
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -115,6 +141,8 @@ public class MainAppController implements Initializable {
             precio.setCellValueFactory(new PropertyValueFactory<>("cost"));
             unidades.setCellValueFactory(new PropertyValueFactory<>("units"));
             nombre.setCellValueFactory(new PropertyValueFactory<>("name"));
+            
+            actualizarCategorias();
             
             List<Charge> charges = acount.getUserCharges();
             tabla.setItems(FXCollections.observableList(charges));
@@ -169,17 +197,59 @@ public class MainAppController implements Initializable {
     
     @FXML
     private void confirmarCategoria(ActionEvent event) {
-        
+        if (nombreCategoria.getText().isBlank()) {
+            errorCategoria.setText("Debes introducir un nombre");
+        } else {
+            try {
+                if (!acount.registerCategory(nombreCategoria.getText(), descripcionCategoria.getText())) {
+                    errorCategoria.setText("La categoria ya existe");
+                } else {
+                    nombreCategoria.setText("");
+                    descripcionCategoria.setText("");
+                    añadirCategoriaPanel.setVisible(false);
+                    actualizarCategorias();
+                }
+            } catch (AcountDAOException ex) {
+                errorCategoria.setText("Error al añadir la categoria");
+                System.err.println(ex);
+            }
+        }
     }
     
+    private File file;
+    private Image avatar;
     @FXML
     private void añadirFactura(ActionEvent event) {
+        FileChooser fc = new FileChooser();
         
+        try {
+            file = fc.showOpenDialog(null);
+            String url = file.getAbsolutePath();
+            if (!url.contains(".png")) throw new FileNotFoundException();
+            avatar = new Image(new FileInputStream(url));
+            factura.setImage(avatar);
+            factura.setFitWidth(20);
+            factura.setFitHeight(20);
+        } catch (FileNotFoundException ex) {
+            errorGasto.setText("No se ha podido importar la factura");
+        } catch (Exception e) {}
     }
     
     @FXML
     private void añadirGasto(ActionEvent event) {
-        
+        if (nombre.getText().isBlank()) {
+            errorGasto.setText("Debes introducir tu nombre");
+        } else if (categoria.getText().isBlank()) {
+            errorGasto.setText("Debes introducir una categoria");
+        } else if (coste.getText().isBlank()) {
+            errorGasto.setText("Debes introducir el gasto");
+        } else if (unidades.getText().isBlank()) {
+            errorGasto.setText("Debes introducir las unidades");
+        } else if (fecha.getText().isBlank()) {
+            errorGasto.setText("Debes introducir una fecha");
+        } else {
+            
+        }
     }
     
     @FXML
@@ -208,6 +278,7 @@ public class MainAppController implements Initializable {
     private void nuevoGastoPanelClicked(MouseEvent event) {
         nuevoGastoPanel.requestFocus();
         añadirCategoriaPanel.setVisible(false);
+        añadirCategoria = false;
     }
 
     

@@ -316,6 +316,7 @@ public class MainAppController implements Initializable {
         } catch (FileNotFoundException ex) {
             errorGasto.setText("No se ha podido importar la factura");
         } catch (Exception e) {
+            System.err.println(e);
         }
     }
 

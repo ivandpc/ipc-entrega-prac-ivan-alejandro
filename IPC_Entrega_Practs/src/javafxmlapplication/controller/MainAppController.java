@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.TextFormatter;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -97,7 +99,6 @@ public class MainAppController implements Initializable {
     private Button añadirCategoriaButton;
     @FXML
     private TextField coste;
-    @FXML
     private DatePicker fecha1;
     @FXML
     private Button añadirGastoButton;
@@ -123,34 +124,73 @@ public class MainAppController implements Initializable {
     private ChoiceBox<Category> categoriaText;
     @FXML
     private Text errorCategoria;
-    @FXML
     private TextField unidadestext;
     @FXML
     private Button eliminargastobutton;
     @FXML
     private PieChart piechart;
+    @FXML
+    private TextField unidadesText;
+    @FXML
+    private DatePicker fechaGasto;
+    @FXML
+    private Button borrarDatosButton;
 
-    private void actualizarCategorias() throws AcountDAOException {
-        List<Category> categories = acount.getUserCategories();
-        categoriaText.setItems(FXCollections.observableArrayList(categories));
-        categoriaText.setConverter(new StringConverter<Category>() {
-            @Override
-            public String toString(Category category) {
-                return category != null ? category.getName() : "";
-            }
-
-            @Override
-            public Category fromString(String string) {
-                return null;
-            }
-        });
-    }
+    
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //Inicializacion de la tabla principal
         inicializarTabla();
+        //Inicializa el panel de añadir gasto
+        inicializarGastoPanel();
     }
 
+    private void inicializarGastoPanel() {
+        inicializarCategorias();
+        //Filtrar solo los numeros decimales
+        coste.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) { 
+                coste.setText(oldValue);
+            } 
+        });
+        unidadesText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { 
+                unidadesText.setText(oldValue); 
+            }
+        });
+        fechaGasto.setDayCellFactory((DatePicker picker) -> {
+            return new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate today = LocalDate.now();
+                    setDisable(empty || date.compareTo(today) < 0);
+                }
+            };
+        });
+    }
+    
+    private void inicializarCategorias() {
+        try {
+            List<Category> categories = acount.getUserCategories();
+            categoriaText.setItems(FXCollections.observableArrayList(categories));
+            categoriaText.setConverter(new StringConverter<Category>() {
+                @Override
+                public String toString(Category category) {
+                    return category != null ? category.getName() : "";
+                }
+                 @Override
+                public Category fromString(String string) {
+                    return null;
+                }
+            });
+        } catch (AcountDAOException e) {
+            errorGasto.setText("Error al actualizar la categoria");
+            System.err.println(e);
+        }
+    }
+    
     public void inicializarTabla() {
         try {
             acount = Acount.getInstance();
@@ -179,8 +219,6 @@ public class MainAppController implements Initializable {
             precio.setCellValueFactory(new PropertyValueFactory<>("cost"));
             unidades.setCellValueFactory(new PropertyValueFactory<>("units"));
             nombre.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-            actualizarCategorias();
 
             List<Charge> charges = acount.getUserCharges();
             tabla.setItems(FXCollections.observableList(charges));
@@ -221,29 +259,20 @@ public class MainAppController implements Initializable {
         tabla.getScene().getWindow().hide();
     }
 
-    private boolean nuevoGasto = false;
-
     @FXML
     private void nuevoGasto(ActionEvent event) throws IOException {
-        nuevoGasto = !nuevoGasto;
-        nuevoGastoPanel.setVisible(nuevoGasto);
+        nuevoGastoPanel.setVisible(!nuevoGastoPanel.visibleProperty().getValue());
         añadirCategoriaPanel.setVisible(false);
     }
 
-    private boolean filtro = false;
-
     @FXML
     private void filtro(ActionEvent event) {
-        filtro = !filtro;
-        filtroPanel.setVisible(filtro);
+        filtroPanel.setVisible(!filtroPanel.visibleProperty().getValue());
     }
-
-    private boolean añadirCategoria = false;
 
     @FXML
     private void añadirCategoria(ActionEvent event) {
-        añadirCategoria = !añadirCategoria;
-        añadirCategoriaPanel.setVisible(añadirCategoria);
+        añadirCategoriaPanel.setVisible(!añadirCategoriaPanel.visibleProperty().getValue());
     }
 
     @FXML
@@ -258,7 +287,7 @@ public class MainAppController implements Initializable {
                     nombreCategoria.setText("");
                     descripcionCategoria.setText("");
                     añadirCategoriaPanel.setVisible(false);
-                    actualizarCategorias();
+                    inicializarCategorias();
                 }
             } catch (AcountDAOException ex) {
                 errorCategoria.setText("Error al añadir la categoria");
@@ -290,33 +319,53 @@ public class MainAppController implements Initializable {
         }
     }
 
-    @FXML
-    private void añadirGasto(ActionEvent event) throws AcountDAOException {
-        if (nombre.getText().isBlank()) {
-            errorGasto.setText("Debes introducir tu nombre");
-        } else if (categoria.getText().isBlank()) {
-            errorGasto.setText("Debes introducir una categoria");
-        } else if (coste.getText().isBlank()) {
-            errorGasto.setText("Debes introducir el gasto");
-        } else if (unidades.getText().isBlank()) {
-            errorGasto.setText("Debes introducir las unidades");
-        } else if (fecha.getText().isBlank()) {
-            errorGasto.setText("Debes introducir una fecha");
-        } else {
-
-        }
-        Category categoria = (Category) this.categoriaText.getValue();
-        if (acount.registerCharge(nombreText.getText(), descripcion.getText(), Integer.parseInt(coste.getText()), Integer.parseInt(unidadestext.getText()), factura.getImage(), fecha1.getValue(), categoriaText.getValue())) {
-            inicializarTabla();
+    @FXML 
+    private void añadirGasto(ActionEvent event) {
+        try {
+            if (nombreText.getText().isEmpty()) {
+                errorGasto.setText("Debes introducir tu nombre");
+            } else if (categoriaText.getValue() == null) {
+                errorGasto.setText("Debes introducir una categoria");
+            } else if (coste.getText().isEmpty()) {
+                errorGasto.setText("Debes introducir el coste");
+            } else if (unidadesText.getText().isEmpty()) {
+                errorGasto.setText("Debes introducir las unidades");
+            } else if (fechaGasto.getValue() == null) {
+                errorGasto.setText("Debes introducir una fecha");
+            } else if (acount.registerCharge(nombreText.getText(), 
+                                          descripcion.getText(), 
+                                          Double.parseDouble(coste.getText()), 
+                                          Integer.parseInt(unidadesText.getText()), 
+                                          factura.getImage(), 
+                                          fechaGasto.getValue(), 
+                                          categoriaText.getValue())) 
+            {
+                inicializarTabla();
+                nombreText.setText("");
+                descripcion.setText("");
+                categoriaText.setValue(null);
+                coste.setText("");
+                unidadesText.setText("");
+                if (factura.getImage() != null) {
+                    factura.setImage(null);
+                    factura.setFitHeight(0);
+                    factura.setFitWidth(0);
+                }
+            }
+        } catch (AcountDAOException e) {
+            errorGasto.setText("Error al añadir el gasto");
+            System.err.println(e);
         }
     }
 
     @FXML
     private void nextNombre(ActionEvent event) {
+        if (nombreText.getText().isBlank()) descripcion.requestFocus();
     }
 
     @FXML
     private void nextDescripcion(ActionEvent event) {
+        categoriaText.requestFocus();
     }
 
     @FXML
@@ -329,6 +378,7 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void nextFecha(ActionEvent event) {
+        añadirGastoButton.requestFocus();
     }
 
     @FXML
@@ -343,7 +393,6 @@ public class MainAppController implements Initializable {
     private void nuevoGastoPanelClicked(MouseEvent event) {
         nuevoGastoPanel.requestFocus();
         añadirCategoriaPanel.setVisible(false);
-        añadirCategoria = false;
     }
 
     @FXML
@@ -354,6 +403,21 @@ public class MainAppController implements Initializable {
 
         acount.removeCharge(item);
         inicializarTabla();
+    }
+
+    @FXML
+    private void borrarDatos(ActionEvent event) {
+        nombreText.setText("");
+        descripcion.setText("");
+        categoriaText.setValue(null);
+        coste.setText("");
+        unidadesText.setText("");
+        fechaGasto.setValue(null);
+        if (factura.getImage() != null) {
+            factura.setImage(null);
+            factura.setFitHeight(0);
+            factura.setFitWidth(0);
+        }
     }
 
 }

@@ -136,8 +136,6 @@ public class MainAppController implements Initializable {
     @FXML
     private Button borrarDatosButton;
 
-    
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         //Inicializacion de la tabla principal
@@ -150,13 +148,13 @@ public class MainAppController implements Initializable {
         inicializarCategorias();
         //Filtrar solo los numeros decimales
         coste.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) { 
+            if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {
                 coste.setText(oldValue);
-            } 
+            }
         });
         unidadesText.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) { 
-                unidadesText.setText(oldValue); 
+            if (!newValue.matches("\\d*")) {
+                unidadesText.setText(oldValue);
             }
         });
         fechaGasto.setDayCellFactory((DatePicker picker) -> {
@@ -170,7 +168,7 @@ public class MainAppController implements Initializable {
             };
         });
     }
-    
+
     private void inicializarCategorias() {
         try {
             List<Category> categories = acount.getUserCategories();
@@ -180,7 +178,8 @@ public class MainAppController implements Initializable {
                 public String toString(Category category) {
                     return category != null ? category.getName() : "";
                 }
-                 @Override
+
+                @Override
                 public Category fromString(String string) {
                     return null;
                 }
@@ -190,7 +189,7 @@ public class MainAppController implements Initializable {
             System.err.println(e);
         }
     }
-    
+
     public void inicializarTabla() {
         try {
             acount = Acount.getInstance();
@@ -226,15 +225,17 @@ public class MainAppController implements Initializable {
             añadirCategoriaPanel.setVisible(false);
             List<Category> categories = acount.getUserCategories();
             ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
-            for(Category c : categories){
-                datos = FXCollections.observableArrayList(new PieChart.Data(c.getName(),20));
-                System.out.println(c.getName());
+            for (Charge charge : charges) {
+                double cost = 0;
+                Category c = charge.getCategory();
+                if (charge.getCategory().equals(c)) {
+                    cost += charge.getCost();
+                }
+                datos.add(new PieChart.Data(charge.getCategory().getName(), cost));
             }
 
             piechart.setData(datos);
-        } catch (AcountDAOException ex) {
-            System.err.println(ex);
-        } catch (IOException ex) {
+        } catch (AcountDAOException | IOException ex) {
             System.err.println(ex);
         }
     }
@@ -320,7 +321,7 @@ public class MainAppController implements Initializable {
         }
     }
 
-    @FXML 
+    @FXML
     private void añadirGasto(ActionEvent event) {
         try {
             if (nombreText.getText().isEmpty()) {
@@ -333,14 +334,13 @@ public class MainAppController implements Initializable {
                 errorGasto.setText("Debes introducir las unidades");
             } else if (fechaGasto.getValue() == null) {
                 errorGasto.setText("Debes introducir una fecha");
-            } else if (acount.registerCharge(nombreText.getText(), 
-                                         descripcion.getText(), 
-                                          Double.parseDouble(coste.getText()), 
-                                          Integer.parseInt(unidadesText.getText()), 
-                                          factura.getImage(), 
-                                          fechaGasto.getValue(), 
-                                          categoriaText.getValue())) 
-            {
+            } else if (acount.registerCharge(nombreText.getText(),
+                    descripcion.getText(),
+                    Double.parseDouble(coste.getText()),
+                    Integer.parseInt(unidadesText.getText()),
+                    factura.getImage(),
+                    fechaGasto.getValue(),
+                    categoriaText.getValue())) {
                 inicializarTabla();
                 nombreText.setText("");
                 descripcion.setText("");
@@ -362,7 +362,9 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void nextNombre(ActionEvent event) {
-        if (nombreText.getText().isBlank()) descripcion.requestFocus();
+        if (nombreText.getText().isBlank()) {
+            descripcion.requestFocus();
+        }
     }
 
     @FXML

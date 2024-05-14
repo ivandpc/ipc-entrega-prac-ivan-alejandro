@@ -282,7 +282,7 @@ public class MainAppController implements Initializable {
         } else {
             try {
                 if (!acount.registerCategory(nombreCategoria.getText(), descripcionCategoria.getText())) {
-                    errorCategoria.setText("La categoria ya existe");
+                    errorCategoria.setText("Error al añadir la categoria");
                 } else {
                     nombreCategoria.setText("");
                     descripcionCategoria.setText("");
@@ -290,7 +290,7 @@ public class MainAppController implements Initializable {
                     inicializarCategorias();
                 }
             } catch (AcountDAOException ex) {
-                errorCategoria.setText("Error al añadir la categoria");
+                errorCategoria.setText("La categoria ya existe");
                 System.err.println(ex);
             }
         }
@@ -334,7 +334,7 @@ public class MainAppController implements Initializable {
             } else if (fechaGasto.getValue() == null) {
                 errorGasto.setText("Debes introducir una fecha");
             } else if (acount.registerCharge(nombreText.getText(), 
-                                          descripcion.getText(), 
+                                         descripcion.getText(), 
                                           Double.parseDouble(coste.getText()), 
                                           Integer.parseInt(unidadesText.getText()), 
                                           factura.getImage(), 
@@ -347,6 +347,7 @@ public class MainAppController implements Initializable {
                 categoriaText.setValue(null);
                 coste.setText("");
                 unidadesText.setText("");
+                fechaGasto.setValue(null);
                 if (factura.getImage() != null) {
                     factura.setImage(null);
                     factura.setFitHeight(0);

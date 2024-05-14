@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.TextFormatter;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,6 +28,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
@@ -46,6 +49,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -97,6 +101,10 @@ public class MainAppController implements Initializable {
     private Button añadirCategoriaButton;
     @FXML
     private TextField coste;
+<<<<<<< HEAD
+=======
+    private DatePicker fecha1;
+>>>>>>> origin
     @FXML
     private Button añadirGastoButton;
     @FXML
@@ -125,11 +133,23 @@ public class MainAppController implements Initializable {
     @FXML
     private Button eliminargastobutton;
     @FXML
+<<<<<<< HEAD
     private DatePicker fechaGasto;
     @FXML
     private Button borrarDatosButton;
     @FXML
     private TextField unidadesText;
+=======
+    private PieChart piechart;
+    @FXML
+    private TextField unidadesText;
+    @FXML
+    private DatePicker fechaGasto;
+    @FXML
+    private Button borrarDatosButton;
+
+    
+>>>>>>> origin
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -137,6 +157,7 @@ public class MainAppController implements Initializable {
         inicializarTabla();
         //Inicializa el panel de añadir gasto
         inicializarGastoPanel();
+<<<<<<< HEAD
     }
     
     private void inicializarGastoPanel() {
@@ -183,8 +204,55 @@ public class MainAppController implements Initializable {
             errorGasto.setText("Error al actualizar la categoria");
             System.err.println(e);
         }
+=======
+>>>>>>> origin
     }
 
+    private void inicializarGastoPanel() {
+        inicializarCategorias();
+        //Filtrar solo los numeros decimales
+        coste.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) { 
+                coste.setText(oldValue);
+            } 
+        });
+        unidadesText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) { 
+                unidadesText.setText(oldValue); 
+            }
+        });
+        fechaGasto.setDayCellFactory((DatePicker picker) -> {
+            return new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate today = LocalDate.now();
+                    setDisable(empty || date.compareTo(today) < 0);
+                }
+            };
+        });
+    }
+    
+    private void inicializarCategorias() {
+        try {
+            List<Category> categories = acount.getUserCategories();
+            categoriaText.setItems(FXCollections.observableArrayList(categories));
+            categoriaText.setConverter(new StringConverter<Category>() {
+                @Override
+                public String toString(Category category) {
+                    return category != null ? category.getName() : "";
+                }
+                 @Override
+                public Category fromString(String string) {
+                    return null;
+                }
+            });
+        } catch (AcountDAOException e) {
+            errorGasto.setText("Error al actualizar la categoria");
+            System.err.println(e);
+        }
+    }
+    
     public void inicializarTabla() {
         try {
             acount = Acount.getInstance();
@@ -213,12 +281,23 @@ public class MainAppController implements Initializable {
             unidades.setCellValueFactory(new PropertyValueFactory<>("units"));
             nombre.setCellValueFactory(new PropertyValueFactory<>("name"));
 
+<<<<<<< HEAD
             
 
+=======
+>>>>>>> origin
             List<Charge> charges = acount.getUserCharges();
             tabla.setItems(FXCollections.observableList(charges));
             nuevoGastoPanel.setVisible(false);
             añadirCategoriaPanel.setVisible(false);
+            List<Category> categories = acount.getUserCategories();
+            ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
+            for(Category c : categories){
+                datos = FXCollections.observableArrayList(new PieChart.Data(c.getName(),20));
+                System.out.println(c.getName());
+            }
+
+            piechart.setData(datos);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         } catch (IOException ex) {
@@ -251,10 +330,18 @@ public class MainAppController implements Initializable {
         nuevoGastoPanel.setVisible(!nuevoGastoPanel.visibleProperty().getValue());
         añadirCategoriaPanel.setVisible(false);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin
     @FXML
     private void filtro(ActionEvent event) {
         filtroPanel.setVisible(!filtroPanel.visibleProperty().getValue());
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin
     @FXML
     private void añadirCategoria(ActionEvent event) {
         añadirCategoriaPanel.setVisible(!añadirCategoriaPanel.visibleProperty().getValue());
@@ -300,9 +387,14 @@ public class MainAppController implements Initializable {
         } catch (FileNotFoundException ex) {
             errorGasto.setText("No se ha podido importar la factura");
         } catch (Exception e) {
+            System.err.println(e);
         }
     }
+<<<<<<< HEAD
     //Falta implementar que se añada la fecha
+=======
+
+>>>>>>> origin
     @FXML 
     private void añadirGasto(ActionEvent event) {
         try {
@@ -383,15 +475,35 @@ public class MainAppController implements Initializable {
     private void eliminargasto(ActionEvent event) throws AcountDAOException {
         TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
         int row = pos.getRow();
+<<<<<<< HEAD
 
         // Item here is the table view type:
+=======
+>>>>>>> origin
         Charge item = tabla.getItems().get(row);
 
         acount.removeCharge(item);
         inicializarTabla();
+    }
 
+<<<<<<< HEAD
         // this gives the value in the selected cell:
         //String data = (String) col.getCellObservableValue(item).getValue();
+=======
+    @FXML
+    private void borrarDatos(ActionEvent event) {
+        nombreText.setText("");
+        descripcion.setText("");
+        categoriaText.setValue(null);
+        coste.setText("");
+        unidadesText.setText("");
+        fechaGasto.setValue(null);
+        if (factura.getImage() != null) {
+            factura.setImage(null);
+            factura.setFitHeight(0);
+            factura.setFitWidth(0);
+        }
+>>>>>>> origin
     }
 
     @FXML

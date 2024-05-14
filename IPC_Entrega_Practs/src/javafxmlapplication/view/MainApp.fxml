@@ -35,12 +35,11 @@
               <items>
                   <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="0.0" orientation="VERTICAL" prefHeight="718.0" prefWidth="270.0">
                     <items>
-                        <VBox />
                         <VBox>
                            <children>
-                              <PieChart />
-                           </children>
-                        </VBox>
+                              <PieChart fx:id="piechart" />
+                           </children></VBox>
+                        <VBox />
                     </items>
                   </SplitPane>
                   <AnchorPane>
@@ -135,7 +134,11 @@
                                           <ImageView fx:id="factura" pickOnBounds="true" preserveRatio="true" />
                                        </graphic>
                                     </Button>
+<<<<<<< HEAD
                                     <Button fx:id="borrarDatosButton" mnemonicParsing="false" onAction="#borrarDatos" text="Borrar datos" GridPane.rowIndex="7" />
+=======
+                                     <Button fx:id="borrarDatosButton" mnemonicParsing="false" onAction="#borrarDatos" text="Borrar datos" GridPane.rowIndex="7" />
+>>>>>>> origin
                                  </children>
                                  <StackPane.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -95,8 +95,6 @@ public class MainAppController implements Initializable {
     @FXML
     private TextField coste;
     @FXML
-    private TextField unidades1;
-    @FXML
     private DatePicker fecha1;
     @FXML
     private Button añadirGastoButton;
@@ -122,6 +120,10 @@ public class MainAppController implements Initializable {
     private ChoiceBox<Category> categoriaText;
     @FXML
     private Text errorCategoria;
+    @FXML
+    private TextField unidadestext;
+    @FXML
+    private Button eliminargastobutton;
 
     private void actualizarCategorias() throws AcountDAOException {
         List<Category> categories = acount.getUserCategories();
@@ -141,6 +143,9 @@ public class MainAppController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        inicializarTabla();
+    }
+    public void inicializarTabla(){
         try {
             acount = Acount.getInstance();
             user = Acount.getInstance().getLoggedUser();
@@ -272,7 +277,7 @@ public class MainAppController implements Initializable {
     }
 
     @FXML
-    private void añadirGasto(ActionEvent event) {
+    private void añadirGasto(ActionEvent event) throws AcountDAOException {
         if (nombre.getText().isBlank()) {
             errorGasto.setText("Debes introducir tu nombre");
         } else if (categoria.getText().isBlank()) {
@@ -287,7 +292,9 @@ public class MainAppController implements Initializable {
 
         }
         Category categoria = (Category) this.categoriaText.getValue();
-        //acount.registerCharge(nombre.getText(), descripcion.getText() , coste.getText(), unidades.getText(), factura.getImage(), fecha1.getChronology(), categoriaText.getValue());
+        if(acount.registerCharge(nombreText.getText(), descripcion.getText() , Integer.parseInt(coste.getText()),Integer.parseInt(unidadestext.getText()), factura.getImage(), fecha1.getValue(), categoriaText.getValue())){
+            inicializarTabla();
+        }
     }
 
     @FXML
@@ -323,6 +330,11 @@ public class MainAppController implements Initializable {
         nuevoGastoPanel.requestFocus();
         añadirCategoriaPanel.setVisible(false);
         añadirCategoria = false;
+    }
+
+    @FXML
+    private void eliminargasto(ActionEvent event) {
+        
     }
 
 }

@@ -86,7 +86,7 @@ public class LoginController implements Initializable {
     @FXML
     private void inicioSesion(ActionEvent event) throws AcountDAOException, IOException {
         if (Acount.getInstance().logInUserByCredentials(userText.getText(), passwordText.getText())) {
-            Parent root = FXMLLoader.load(getClass().getResource("../view/mainApp.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);

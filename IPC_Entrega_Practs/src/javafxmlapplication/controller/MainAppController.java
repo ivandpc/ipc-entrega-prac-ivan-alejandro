@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+//import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +33,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -44,11 +46,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import model.Acount;
 import model.Category;
 import model.Charge;
 import model.AcountDAOException;
 import model.User;
+import model.Category;
+import model.AcountDAO;
 
 /**
  * FXML Controller class
@@ -74,7 +79,7 @@ public class MainAppController implements Initializable {
     private MenuButton toolbarUsername;
     @FXML
     private ImageView toolbarImage;
-    
+
     private Acount acount = null;
     private User user = null;
     @FXML
@@ -114,38 +119,62 @@ public class MainAppController implements Initializable {
     @FXML
     private Text errorGasto;
     @FXML
-    private ChoiceBox<String> categoriaText;
+    private ChoiceBox<Category> categoriaText;
     @FXML
     private Text errorCategoria;
-    
+
     private void actualizarCategorias() throws AcountDAOException {
         List<Category> categories = acount.getUserCategories();
-            List<String> cat = new ArrayList<>();
-            for (Category c : categories) {
-                cat.add(c.getName());
+        categoriaText.setItems(FXCollections.observableArrayList(categories));
+        categoriaText.setConverter(new StringConverter<Category>() {
+            @Override
+            public String toString(Category category) {
+                return category != null ? category.getName() : "";
             }
-            categoriaText.setItems(FXCollections.observableArrayList(cat));
+
+            @Override
+            public Category fromString(String string) {
+                return null;
+            }
+        });
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             acount = Acount.getInstance();
             user = Acount.getInstance().getLoggedUser();
-            
+
             toolbarImage.setImage(user.getImage());
             toolbarUsername.setText(user.getNickName());
-            
-            categoria.setCellValueFactory(new PropertyValueFactory<>("Category"));
+
+            categoria.setCellFactory(column -> {
+                return new TableCell<Charge, Category>() {
+                    @Override
+                    protected void updateItem(Category category, boolean empty) {
+                        super.updateItem(category, empty);
+
+                        if (empty || category == null) {
+                            setText(null);
+                        } else {
+                            setText(category.getName());
+                        }
+                    }
+                };
+            });
+
+            categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
             fecha.setCellValueFactory(new PropertyValueFactory<>("date"));
             precio.setCellValueFactory(new PropertyValueFactory<>("cost"));
             unidades.setCellValueFactory(new PropertyValueFactory<>("units"));
             nombre.setCellValueFactory(new PropertyValueFactory<>("name"));
-            
+
             actualizarCategorias();
-            
+
             List<Charge> charges = acount.getUserCharges();
             tabla.setItems(FXCollections.observableList(charges));
+            nuevoGastoPanel.setVisible(false);
+            añadirCategoriaPanel.setVisible(false);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         } catch (IOException ex) {
@@ -172,16 +201,18 @@ public class MainAppController implements Initializable {
         stage.show();
         tabla.getScene().getWindow().hide();
     }
-    
+
     private boolean nuevoGasto = false;
+
     @FXML
     private void nuevoGasto(ActionEvent event) throws IOException {
         nuevoGasto = !nuevoGasto;
         nuevoGastoPanel.setVisible(nuevoGasto);
         añadirCategoriaPanel.setVisible(false);
     }
-    
+
     private boolean filtro = false;
+
     @FXML
     private void filtro(ActionEvent event) {
         filtro = !filtro;
@@ -189,12 +220,13 @@ public class MainAppController implements Initializable {
     }
 
     private boolean añadirCategoria = false;
+
     @FXML
     private void añadirCategoria(ActionEvent event) {
         añadirCategoria = !añadirCategoria;
         añadirCategoriaPanel.setVisible(añadirCategoria);
     }
-    
+
     @FXML
     private void confirmarCategoria(ActionEvent event) {
         if (nombreCategoria.getText().isBlank()) {
@@ -215,26 +247,30 @@ public class MainAppController implements Initializable {
             }
         }
     }
-    
+
     private File file;
     private Image avatar;
+
     @FXML
     private void añadirFactura(ActionEvent event) {
         FileChooser fc = new FileChooser();
-        
+
         try {
             file = fc.showOpenDialog(null);
             String url = file.getAbsolutePath();
-            if (!url.contains(".png")) throw new FileNotFoundException();
+            if (!url.contains(".png")) {
+                throw new FileNotFoundException();
+            }
             avatar = new Image(new FileInputStream(url));
             factura.setImage(avatar);
             factura.setFitWidth(20);
             factura.setFitHeight(20);
         } catch (FileNotFoundException ex) {
             errorGasto.setText("No se ha podido importar la factura");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
-    
+
     @FXML
     private void añadirGasto(ActionEvent event) {
         if (nombre.getText().isBlank()) {
@@ -248,40 +284,45 @@ public class MainAppController implements Initializable {
         } else if (fecha.getText().isBlank()) {
             errorGasto.setText("Debes introducir una fecha");
         } else {
-            
+
         }
+        Category categoria = (Category) this.categoriaText.getValue();
+        //acount.registerCharge(nombre.getText(), descripcion.getText() , coste.getText(), unidades.getText(), factura.getImage(), fecha1.getChronology(), categoriaText.getValue());
     }
-    
+
     @FXML
     private void nextNombre(ActionEvent event) {
     }
+
     @FXML
     private void nextDescripcion(ActionEvent event) {
     }
+
     @FXML
     private void nextCoste(ActionEvent event) {
     }
+
     @FXML
     private void nextUnidades(ActionEvent event) {
     }
+
     @FXML
     private void nextFecha(ActionEvent event) {
     }
+
     @FXML
     private void nextNombreCategoria(ActionEvent event) {
     }
+
     @FXML
     private void nextDescripcionCategoria(ActionEvent event) {
     }
-    
+
     @FXML
     private void nuevoGastoPanelClicked(MouseEvent event) {
         nuevoGastoPanel.requestFocus();
         añadirCategoriaPanel.setVisible(false);
         añadirCategoria = false;
     }
-
-    
-
 
 }

@@ -27,7 +27,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
+<AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
@@ -43,45 +43,49 @@
                         </VBox>
                     </items>
                   </SplitPane>
-                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="721.0" prefWidth="1003.0">
+                  <AnchorPane>
                      <children>
-                        <BorderPane prefHeight="722.0" prefWidth="1005.0">
+                        <BorderPane prefHeight="721.0" prefWidth="1003.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <center>
-                              <TableView fx:id="tabla" BorderPane.alignment="CENTER">
-                                <columns>
-                                  <TableColumn fx:id="nombre" maxWidth="1.7976931348623157E308" minWidth="300.0" prefWidth="400.0" text="Nombre" />
-                                    <TableColumn fx:id="categoria" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Categoria" />
-                                    <TableColumn fx:id="unidades" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Unidades" />
-                                    <TableColumn fx:id="precio" maxWidth="200.0" prefWidth="100.0" text="Precio" />
-                                    <TableColumn fx:id="fecha" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="fecha" />
-                                </columns>
-                                 <columnResizePolicy>
-                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                 </columnResizePolicy>
-                              </TableView>
-                           </center>
-                           <top>
-                              <BorderPane maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="1002.0">
-                                 <BorderPane.margin>
-                                    <Insets />
-                                 </BorderPane.margin>
+                              <BorderPane BorderPane.alignment="CENTER">
                                  <center>
-                                    <HBox spacing="5.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
-                                       </children>
-                                    </HBox>
+                                    <TableView fx:id="tabla" BorderPane.alignment="CENTER">
+                                      <columns>
+                                        <TableColumn fx:id="nombre" maxWidth="1.7976931348623157E308" minWidth="300.0" prefWidth="400.0" text="Nombre" />
+                                          <TableColumn fx:id="categoria" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Categoria" />
+                                          <TableColumn fx:id="unidades" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Unidades" />
+                                          <TableColumn fx:id="precio" maxWidth="200.0" prefWidth="100.0" text="Precio" />
+                                          <TableColumn fx:id="fecha" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="fecha" />
+                                      </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                    </TableView>
                                  </center>
-                                 <right>
-                                    <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                                       <children>
-                                          <TextField fx:id="buscarText" />
-                                          <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" text="Filtro" />
-                                       </children>
-                                    </HBox>
-                                 </right>
+                                 <top>
+                                    <BorderPane maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="1002.0">
+                                       <BorderPane.margin>
+                                          <Insets />
+                                       </BorderPane.margin>
+                                       <center>
+                                          <HBox spacing="5.0">
+                                             <children>
+                                                <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
+                                             </children>
+                                          </HBox>
+                                       </center>
+                                       <right>
+                                          <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                             <children>
+                                                <TextField fx:id="buscarText" />
+                                                <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" />
+                                             </children>
+                                          </HBox>
+                                       </right>
+                                    </BorderPane>
+                                 </top>
                               </BorderPane>
-                           </top>
+                           </center>
                         </BorderPane>
                         <StackPane fx:id="nuevoGastoPanel" layoutY="25.0" onMousePressed="#nuevoGastoPanelClicked" styleClass="stackPane" stylesheets="@../../style/stackPane.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
                            <children>

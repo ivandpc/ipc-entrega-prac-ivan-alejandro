@@ -26,6 +26,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -44,6 +45,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -125,6 +127,8 @@ public class MainAppController implements Initializable {
     private TextField unidadestext;
     @FXML
     private Button eliminargastobutton;
+    @FXML
+    private PieChart piechart;
 
     private void actualizarCategorias() throws AcountDAOException {
         List<Category> categories = acount.getUserCategories();
@@ -182,6 +186,14 @@ public class MainAppController implements Initializable {
             tabla.setItems(FXCollections.observableList(charges));
             nuevoGastoPanel.setVisible(false);
             añadirCategoriaPanel.setVisible(false);
+            List<Category> categories = acount.getUserCategories();
+            ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
+            for(Category c : categories){
+                datos = FXCollections.observableArrayList(new PieChart.Data(c.getName(),20));
+                System.out.println(c.getName());
+            }
+
+            piechart.setData(datos);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         } catch (IOException ex) {
@@ -338,15 +350,10 @@ public class MainAppController implements Initializable {
     private void eliminargasto(ActionEvent event) throws AcountDAOException {
         TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
         int row = pos.getRow();
-
-// Item here is the table view type:
         Charge item = tabla.getItems().get(row);
 
         acount.removeCharge(item);
         inicializarTabla();
-
-// this gives the value in the selected cell:
-        //String data = (String) col.getCellObservableValue(item).getValue();
     }
 
 }

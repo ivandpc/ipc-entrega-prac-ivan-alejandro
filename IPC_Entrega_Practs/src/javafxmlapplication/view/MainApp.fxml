@@ -35,12 +35,11 @@
               <items>
                   <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="0.0" orientation="VERTICAL" prefHeight="718.0" prefWidth="270.0">
                     <items>
-                        <VBox />
                         <VBox>
                            <children>
-                              <PieChart />
-                           </children>
-                        </VBox>
+                              <PieChart fx:id="piechart" />
+                           </children></VBox>
+                        <VBox />
                     </items>
                   </SplitPane>
                   <AnchorPane>

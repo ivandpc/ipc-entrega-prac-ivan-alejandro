@@ -35,6 +35,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -145,7 +146,8 @@ public class MainAppController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         inicializarTabla();
     }
-    public void inicializarTabla(){
+
+    public void inicializarTabla() {
         try {
             acount = Acount.getInstance();
             user = Acount.getInstance().getLoggedUser();
@@ -292,7 +294,7 @@ public class MainAppController implements Initializable {
 
         }
         Category categoria = (Category) this.categoriaText.getValue();
-        if(acount.registerCharge(nombreText.getText(), descripcion.getText() , Integer.parseInt(coste.getText()),Integer.parseInt(unidadestext.getText()), factura.getImage(), fecha1.getValue(), categoriaText.getValue())){
+        if (acount.registerCharge(nombreText.getText(), descripcion.getText(), Integer.parseInt(coste.getText()), Integer.parseInt(unidadestext.getText()), factura.getImage(), fecha1.getValue(), categoriaText.getValue())) {
             inicializarTabla();
         }
     }
@@ -333,8 +335,18 @@ public class MainAppController implements Initializable {
     }
 
     @FXML
-    private void eliminargasto(ActionEvent event) {
-        
+    private void eliminargasto(ActionEvent event) throws AcountDAOException {
+        TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
+        int row = pos.getRow();
+
+// Item here is the table view type:
+        Charge item = tabla.getItems().get(row);
+
+        acount.removeCharge(item);
+        inicializarTabla();
+
+// this gives the value in the selected cell:
+        //String data = (String) col.getCellObservableValue(item).getValue();
     }
 
 }

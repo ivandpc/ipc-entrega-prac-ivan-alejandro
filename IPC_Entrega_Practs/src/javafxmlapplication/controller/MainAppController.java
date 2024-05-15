@@ -246,6 +246,7 @@ public class MainAppController implements Initializable {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Stage stage = (Stage) tabla.getScene().getWindow();
+        stage.setResizable(false);
         stage.setScene(scene);
     }
 
@@ -257,6 +258,7 @@ public class MainAppController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
+        stage.setResizable(false);
         tabla.getScene().getWindow().hide();
     }
 
@@ -292,7 +294,6 @@ public class MainAppController implements Initializable {
                 }
             } catch (AcountDAOException ex) {
                 errorCategoria.setText("La categoria ya existe");
-                System.err.println(ex);
             }
         }
     }

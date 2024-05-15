@@ -30,6 +30,7 @@ public class JavaFXMLApplication extends Application {
         stage.setScene(scene);
         stage.setTitle("Cuenta de gastos");
         stage.show();
+        stage.setResizable(false);
     }
     
     public static void main(String[] args) {

@@ -90,6 +90,7 @@ public class LoginController implements Initializable {
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
+            stage.setResizable(true);
         } else {
             error.setText("Error en las credenciales");
         }

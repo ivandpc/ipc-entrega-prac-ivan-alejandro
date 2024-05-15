@@ -77,7 +77,7 @@
                                        <right>
                                           <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                              <children>
-                                                <TextField fx:id="buscarText" />
+                                                <TextField fx:id="buscarText" onKeyPressed="#buscar" />
                                                 <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" />
                                              </children>
                                           </HBox>

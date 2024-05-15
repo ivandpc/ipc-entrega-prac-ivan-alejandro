@@ -11,10 +11,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.TextFormatter;
 import javafx.beans.property.SimpleObjectProperty;
@@ -44,6 +46,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -138,8 +141,14 @@ public class MainAppController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //Inicializacion de la tabla principal
-        inicializarTabla();
+        try {
+            //Inicializacion de la tabla principal
+            inicializarTabla(Acount.getInstance().getUserCharges());
+        } catch (AcountDAOException ex) {
+            Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //Inicializa el panel de añadir gasto
         inicializarGastoPanel();
     }
@@ -190,7 +199,7 @@ public class MainAppController implements Initializable {
         }
     }
 
-    public void inicializarTabla() {
+    public void inicializarTabla(List<Charge> s) {
         try {
             acount = Acount.getInstance();
             user = Acount.getInstance().getLoggedUser();
@@ -219,7 +228,7 @@ public class MainAppController implements Initializable {
             unidades.setCellValueFactory(new PropertyValueFactory<>("units"));
             nombre.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-            List<Charge> charges = acount.getUserCharges();
+            List<Charge> charges = s;
             tabla.setItems(FXCollections.observableList(charges));
             nuevoGastoPanel.setVisible(false);
             añadirCategoriaPanel.setVisible(false);
@@ -258,7 +267,7 @@ public class MainAppController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-        stage.setResizable(false);
+        //stage.setResizable(false);
         tabla.getScene().getWindow().hide();
     }
 
@@ -323,7 +332,7 @@ public class MainAppController implements Initializable {
     }
 
     @FXML
-    private void añadirGasto(ActionEvent event) {
+    private void añadirGasto(ActionEvent event) throws IOException {
         try {
             if (nombreText.getText().isEmpty()) {
                 errorGasto.setText("Debes introducir tu nombre");
@@ -342,7 +351,7 @@ public class MainAppController implements Initializable {
                     factura.getImage(),
                     fechaGasto.getValue(),
                     categoriaText.getValue())) {
-                inicializarTabla();
+                inicializarTabla(Acount.getInstance().getUserCharges());
                 nombreText.setText("");
                 descripcion.setText("");
                 categoriaText.setValue(null);
@@ -401,13 +410,13 @@ public class MainAppController implements Initializable {
     }
 
     @FXML
-    private void eliminargasto(ActionEvent event) throws AcountDAOException {
+    private void eliminargasto(ActionEvent event) throws AcountDAOException, IOException {
         TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
         int row = pos.getRow();
         Charge item = tabla.getItems().get(row);
 
         acount.removeCharge(item);
-        inicializarTabla();
+        inicializarTabla(Acount.getInstance().getUserCharges());
     }
 
     @FXML
@@ -423,6 +432,20 @@ public class MainAppController implements Initializable {
             factura.setFitHeight(0);
             factura.setFitWidth(0);
         }
+    }
+
+
+    @FXML
+    private void buscar(KeyEvent event) throws AcountDAOException {
+        List<Charge> charges = acount.getUserCharges();
+        List<Charge> s = new ArrayList();
+        for(Charge c : charges ){
+            if(c.getName().toLowerCase().startsWith(buscarText.getText().toLowerCase())){
+                s.add(c);
+            }
+            
+        }
+        inicializarTabla(s);
     }
 
 }

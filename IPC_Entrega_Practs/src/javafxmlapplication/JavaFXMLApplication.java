@@ -11,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+        
+
 
 public class JavaFXMLApplication extends Application {
     
@@ -30,6 +32,8 @@ public class JavaFXMLApplication extends Application {
         stage.setScene(scene);
         stage.setTitle("Cuenta de gastos");
         stage.show();
+        //Application.setUserAgentStylesheet("style/nord-light.css");
+        
         //stage.setResizable(false);
     }
     

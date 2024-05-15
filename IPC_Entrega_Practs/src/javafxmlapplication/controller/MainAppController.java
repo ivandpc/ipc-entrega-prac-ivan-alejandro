@@ -443,7 +443,6 @@ public class MainAppController implements Initializable {
             if(c.getName().toLowerCase().startsWith(buscarText.getText().toLowerCase())){
                 s.add(c);
             }
-            
         }
         inicializarTabla(s);
     }

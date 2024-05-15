@@ -67,7 +67,7 @@
                                           <Insets />
                                        </BorderPane.margin>
                                        <center>
-                                          <HBox spacing="5.0">
+                                          <HBox scaleZ="48.0" spacing="5.0">
                                              <children>
                                                 <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
                                                 <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" />
@@ -75,7 +75,7 @@
                                           </HBox>
                                        </center>
                                        <right>
-                                          <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                                          <HBox BorderPane.alignment="CENTER">
                                              <children>
                                                 <TextField fx:id="buscarText" onKeyPressed="#buscar" />
                                                 <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" />

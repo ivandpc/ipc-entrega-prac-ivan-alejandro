@@ -89,7 +89,7 @@ public class RegistroController implements Initializable {
                 if (Acount.getInstance().registerUser(nombre.getText(), apellidos.getText(), email.getText(), usuario.getText(), password.getText(), avatar, LocalDate.now())) {
                     Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
                     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    scene = new Scene(root);
+                    scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
                     stage.setScene(scene);
                 }
             } catch (AcountDAOException e) {
@@ -120,7 +120,7 @@ public class RegistroController implements Initializable {
     private void cancelar(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
+        scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
         stage.setScene(scene);
     }
 

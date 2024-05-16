@@ -77,6 +77,7 @@ public class PerfilController implements Initializable {
     private ImageView toolbarImage;
     @FXML
     private TextField password2;
+
     /**
      * Initializes the controller class.
      */
@@ -91,13 +92,13 @@ public class PerfilController implements Initializable {
         }
         toolbarImage.setImage(user.getImage());
         toolbarUsername.setText(user.getNickName());
-        
+
         perfil.setImage(user.getImage());
         nombre.setText(user.getName());
         apellidos.setText(user.getSurname());
         email.setText(user.getEmail());
     }
-    
+
     @FXML
     private void confirmar(ActionEvent event) throws AcountDAOException, IOException {
         if (nombre.getText().isBlank()) {
@@ -113,15 +114,18 @@ public class PerfilController implements Initializable {
             user.setName(nombre.getText());
             user.setSurname(apellidos.getText());
             user.setEmail(email.getText());
-            if (!password.getText().isBlank()) user.setPassword(password.getText());
-            
+            if (!password.getText().isBlank()) {
+                user.setPassword(password.getText());
+            }
+
             Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
+            scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
             stage.setScene(scene);
+            stage.setResizable(true);
         }
-            
-    }    
+
+    }
 
     @FXML
     private void singleFileChooser(ActionEvent event) throws FileNotFoundException {
@@ -134,13 +138,14 @@ public class PerfilController implements Initializable {
     }
 
     @FXML
-    private void cancelar(ActionEvent event) throws IOException{
+    private void cancelar(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
+            stage.setScene(scene);
+            stage.setResizable(true);
     }
-    
+
     @FXML
     private void fondoClicked(MouseEvent event) {
         fondo.requestFocus();
@@ -148,38 +153,47 @@ public class PerfilController implements Initializable {
 
     @FXML
     private void nextNombre(ActionEvent event) {
-        if (!nombre.getText().isBlank()) apellidos.requestFocus();
+        if (!nombre.getText().isBlank()) {
+            apellidos.requestFocus();
+        }
     }
 
     @FXML
     private void nextApellidos(ActionEvent event) {
-        if (!apellidos.getText().isBlank()) email.requestFocus();
+        if (!apellidos.getText().isBlank()) {
+            email.requestFocus();
+        }
     }
 
     @FXML
     private void nextEmail(ActionEvent event) {
-        if (!email.getText().isBlank()) password.requestFocus();
+        if (!email.getText().isBlank()) {
+            password.requestFocus();
+        }
     }
 
     @FXML
     private void nextPassword(ActionEvent event) {
-        if (!usuario.getText().isBlank()) password2.requestFocus();
+        if (!usuario.getText().isBlank()) {
+            password2.requestFocus();
+        }
     }
-    
+
     @FXML
     private void nextPassword2(ActionEvent event) throws AcountDAOException, IOException {
-        if (!password.getText().isBlank()) confirmar(event);
+        if (!password.getText().isBlank()) {
+            confirmar(event);
+        }
     }
 
     @FXML
     private void logout(ActionEvent event) throws AcountDAOException, IOException {
-        Acount.getInstance().logOutUser();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/login.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.show();
-        nombre.getScene().getWindow().hide();
+        if (Acount.getInstance().logOutUser()) {
+            Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
+            stage.setScene(scene);
+            stage.setResizable(true);
+        }
     }
 }

@@ -67,7 +67,7 @@ public class LoginController implements Initializable {
         } else if (Acount.getInstance().logInUserByCredentials(userText.getText(), passwordText.getText())) {
             Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
+            scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
             stage.setScene(scene);
             stage.setResizable(true);
         } else {
@@ -79,7 +79,7 @@ public class LoginController implements Initializable {
     private void registro(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../view/registro.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
+        scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
         stage.setScene(scene);
     }
 

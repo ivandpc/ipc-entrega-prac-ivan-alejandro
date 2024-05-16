@@ -24,6 +24,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 //import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,6 +34,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
@@ -46,13 +48,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import model.Acount;
@@ -433,17 +438,43 @@ public class MainAppController implements Initializable {
         }
     }
 
-
     @FXML
     private void buscar(KeyEvent event) throws AcountDAOException {
         List<Charge> charges = acount.getUserCharges();
         List<Charge> s = new ArrayList();
-        for(Charge c : charges ){
-            if(c.getName().toLowerCase().startsWith(buscarText.getText().toLowerCase())){
+        for (Charge c : charges) {
+            if (c.getName().toLowerCase().startsWith(buscarText.getText().toLowerCase())) {
                 s.add(c);
             }
         }
         inicializarTabla(s);
+    }
+
+    @FXML
+    private void contextmenu(ContextMenuEvent event) {
+        ContextMenu cm = new ContextMenu();
+        MenuItem mi1 = new MenuItem("Editar");
+        cm.getItems().add(mi1);
+        MenuItem mi2 = new MenuItem("Imprimir");
+        cm.getItems().add(mi2);
+        cm.show(tabla, event.getScreenX(), event.getScreenY());
+        mi1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                try {
+                    final Stage dialog = new Stage();
+                    Parent root = FXMLLoader.load(getClass().getResource("../view/EditarGasto.fxml"));
+                    dialog.initModality(Modality.APPLICATION_MODAL);
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    dialog.initOwner(stage);
+                    Scene dialogScene = new Scene(root);
+                    dialog.setScene(dialogScene);
+                    dialog.show();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
 }

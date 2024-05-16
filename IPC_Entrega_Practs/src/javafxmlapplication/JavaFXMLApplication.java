@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
         
@@ -31,9 +32,10 @@ public class JavaFXMLApplication extends Application {
         //     - se muestra el stage de manera no modal mediante el metodo show()
         stage.setScene(scene);
         stage.setTitle("Cuenta de gastos");
+        stage.setMinHeight(450);
+        stage.setMinWidth(600);
+        stage.getIcons().add(new Image("/icons/icono.png"));
         stage.show();
-        //Application.setUserAgentStylesheet("style/nord-light.css");
-        
         //stage.setResizable(false);
     }
     

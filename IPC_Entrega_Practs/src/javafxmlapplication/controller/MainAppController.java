@@ -255,7 +255,6 @@ public class MainAppController implements Initializable {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         Stage stage = (Stage) tabla.getScene().getWindow();
-        stage.setResizable(false);
         stage.setScene(scene);
     }
 

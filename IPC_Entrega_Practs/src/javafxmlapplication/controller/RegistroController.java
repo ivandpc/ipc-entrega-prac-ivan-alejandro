@@ -75,13 +75,13 @@ public class RegistroController implements Initializable {
     @FXML
     private void aceptarRegistro(ActionEvent event) throws AcountDAOException, IOException {
         if (nombre.getText().isBlank()) {
-            error.setText("Debes introducir tu nombre.");
+            error.setText("Debes introducir tu nombre");
         } else if (apellidos.getText().isBlank()) {
-            error.setText("Debes introducir tus apellidos.");
+            error.setText("Debes introducir tus apellidos");
         } else if (email.getText().isBlank()) {
-            error.setText("Debes introducir tu email.");
+            error.setText("Debes introducir tu email");
         } else if (usuario.getText().isBlank()) {
-            error.setText("Debes introducir un nombre de usuario.");
+            error.setText("Debes introducir un nombre de usuario");
         } else if (!password.getText().equals(password2.getText())) {
             error.setText("Las contraseñas deben ser iguales");
         } else if (nombre.getText() != null || apellidos.getText() != null || email.getText() != null || usuario.getText() != null || password.getText() != null || LocalDate.now() != null) {

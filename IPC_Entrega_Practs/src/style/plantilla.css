@@ -1,0 +1,18 @@
+.botonEspecial {
+    -fx-background-color: transparent;
+}
+
+.errorText {
+    -fx-text-fill: red;
+}
+
+.stackPane {
+    -fx-border-color: #232730;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-width: 2px;
+}
+
+.topBar {
+    -fx-background-color: #3B4252;
+}

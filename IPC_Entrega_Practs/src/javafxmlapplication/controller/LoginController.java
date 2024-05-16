@@ -55,44 +55,23 @@ public class LoginController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {      
-        SimpleBooleanProperty userVacio = new SimpleBooleanProperty(true);
-        SimpleBooleanProperty passwordVacio = new SimpleBooleanProperty(true);
-        
-        userText.textProperty().addListener((obv, ant, act) -> {
-            if (act.length() == 0) {
-                userVacio.setValue(true);
-                userText.setStyle("-fx-background-color: #ffa8a8;");
-            }
-            else {
-                userVacio.setValue(false);
-                userText.setStyle("");
-            }
-        });
-        passwordText.textProperty().addListener((obv, ant, act) -> {
-            if (act.length() == 0) { 
-                passwordVacio.setValue(true);
-                passwordText.setStyle("-fx-background-color: #ffa8a8;");
-            }
-            else {
-                passwordVacio.setValue(false);
-                passwordText.setStyle("");
-            }
-        });
-        
-        iniciosesionButton.disableProperty().bind(userVacio.or(passwordVacio));
         
     }
 
     @FXML
     private void inicioSesion(ActionEvent event) throws AcountDAOException, IOException {
-        if (Acount.getInstance().logInUserByCredentials(userText.getText(), passwordText.getText())) {
+        if (userText.getText().isBlank()) {
+            error.setText("Debes introducir tu nombre");
+        } else if (passwordText.getText().isBlank()) {
+            error.setText("Debes introducir una contraseña");
+        } else if (Acount.getInstance().logInUserByCredentials(userText.getText(), passwordText.getText())) {
             Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setScene(scene);
             stage.setResizable(true);
         } else {
-            error.setText("Error en las credenciales");
+            error.setText("Error en el usuario o la contraseña");
         }
     }
 

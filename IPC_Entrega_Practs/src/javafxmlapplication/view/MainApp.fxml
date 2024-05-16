@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
@@ -27,206 +28,204 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
-   <children>
-      <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <SplitPane dividerPositions="0.29797979797979796" prefHeight="720.0" prefWidth="1280.0">
+
+<BorderPane prefHeight="720.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
+   <center>
+      <SplitPane dividerPositions="0.3">
+        <items>
+            <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" SplitPane.resizableWithParent="false">
               <items>
-                  <SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="0.0" orientation="VERTICAL" prefHeight="718.0" prefWidth="270.0">
-                    <items>
-                        <VBox>
-                           <children>
-                              <PieChart fx:id="piechart" />
-                           </children></VBox>
-                        <VBox />
-                    </items>
-                  </SplitPane>
-                  <AnchorPane>
+                  <VBox>
                      <children>
-                        <BorderPane prefHeight="718.0" prefWidth="1002.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <center>
-                              <BorderPane BorderPane.alignment="CENTER">
-                                 <center>
-                                    <TableView fx:id="tabla" BorderPane.alignment="CENTER">
-                                      <columns>
-                                        <TableColumn fx:id="nombre" maxWidth="1.7976931348623157E308" minWidth="300.0" prefWidth="400.0" text="Nombre" />
-                                          <TableColumn fx:id="categoria" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Categoria" />
-                                          <TableColumn fx:id="unidades" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Unidades" />
-                                          <TableColumn fx:id="precio" maxWidth="200.0" prefWidth="100.0" text="Precio" />
-                                          <TableColumn fx:id="fecha" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="fecha" />
-                                      </columns>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
-                                    </TableView>
-                                 </center>
-                                 <top>
-                                    <BorderPane maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="1002.0">
-                                       <BorderPane.margin>
-                                          <Insets />
-                                       </BorderPane.margin>
-                                       <center>
-                                          <HBox scaleZ="48.0" spacing="5.0">
-                                             <children>
-                                                <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
-                                                <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" />
-                                             </children>
-                                          </HBox>
-                                       </center>
-                                       <right>
-                                          <HBox BorderPane.alignment="CENTER">
-                                             <children>
-                                                <TextField fx:id="buscarText" onKeyPressed="#buscar" />
-                                                <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" />
-                                             </children>
-                                          </HBox>
-                                       </right>
-                                    </BorderPane>
-                                 </top>
-                              </BorderPane>
-                           </center>
-                        </BorderPane>
-                        <StackPane fx:id="nuevoGastoPanel" layoutY="25.0" onMousePressed="#nuevoGastoPanelClicked" styleClass="stackPane" stylesheets="@../../style/stackPane.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="25.0">
-                           <children>
-                              <GridPane hgap="5.0" vgap="5.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <TextField fx:id="nombreText" onAction="#nextNombre" GridPane.columnIndex="1" />
-                                    <TextField fx:id="descripcion" onAction="#nextDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                       <children>
-                                          <ChoiceBox fx:id="categoriaText" prefWidth="150.0" />
-                                          <Button fx:id="añadirCategoriaButton" mnemonicParsing="false" onAction="#añadirCategoria" text="Añadir categoria" />
-                                       </children>
-                                    </HBox>
-                                    <TextField fx:id="coste" onAction="#nextCoste" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <TextField fx:id="unidadesText" onAction="#nextUnidades" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                    <DatePicker fx:id="fechaGasto" onAction="#nextFecha" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                    <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre:" />
-                                    <Label alignment="CENTER_RIGHT" text="Descripcion:" GridPane.rowIndex="1" />
-                                    <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
-                                    <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
-                                    <Label alignment="CENTER_RIGHT" text="Unidades:" GridPane.rowIndex="4" />
-                                    <Label alignment="CENTER_RIGHT" text="Fecha:" GridPane.rowIndex="5" />
-                                    <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
-                                       <children>
-                                          <Button fx:id="añadirGastoButton" mnemonicParsing="false" onAction="#añadirGasto" text="Añadir Gasto" />
-                                          <Text fx:id="errorGasto" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
-                                       </children>
-                                    </HBox>
-                                    <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
-                                    <Button fx:id="facturaButton" mnemonicParsing="false" onAction="#añadirFactura" text="Añadir" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                                       <graphic>
-                                          <ImageView fx:id="factura" pickOnBounds="true" preserveRatio="true" />
-                                       </graphic>
-                                    </Button>
-                                     <Button fx:id="borrarDatosButton" mnemonicParsing="false" onAction="#borrarDatos" text="Borrar datos" GridPane.rowIndex="7" />
-                                 </children>
-                                 <StackPane.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </StackPane.margin>
-                              </GridPane>
-                           </children>
-                        </StackPane>
-                        <StackPane fx:id="añadirCategoriaPanel" layoutX="271.0" layoutY="121.0" styleClass="stackPane" stylesheets="@../../style/stackPane.css">
-                           <children>
-                              <GridPane hgap="5.0" vgap="5.0">
-                                 <columnConstraints>
-                                    <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                                 <children>
-                                    <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre" />
-                                    <TextField fx:id="nombreCategoria" onAction="#nextNombreCategoria" GridPane.columnIndex="1" />
-                                    <Label alignment="CENTER_RIGHT" text="Descripcion" GridPane.rowIndex="1" />
-                                    <TextField fx:id="descripcionCategoria" onAction="#nextDescripcionCategoria" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                       <children>
-                                          <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" prefHeight="15.0" prefWidth="83.0" text="Confirmar" />
-                                          <Text fx:id="errorCategoria" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                                 <StackPane.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </StackPane.margin>
-                              </GridPane>
-                           </children>
-                        </StackPane>
-                        <StackPane fx:id="filtroPanel" layoutX="694.0" layoutY="25.0" styleClass="stackPane" stylesheets="@../../style/stackPane.css" visible="false">
-                           <children>
-                              <GridPane>
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                              </GridPane>
-                           </children>
-                        </StackPane>
+                        <PieChart fx:id="piechart" />
                      </children>
-                  </AnchorPane>
+                  </VBox>
+                  <VBox />
               </items>
             </SplitPane>
-         </center>
-         <top>
-            <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
-               <center>
-                  <ToolBar>
-                     <items>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Página Principal">
-                           <font>
-                              <Font size="23.0" />
-                           </font>
-                        </Text>
-                     </items>
-                  </ToolBar>
-               </center>
-               <right>
-                  <HBox alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
+            <AnchorPane>
+               <children>
+                  <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <center>
+                        <TableView fx:id="tabla" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="nombre" maxWidth="1.7976931348623157E308" minWidth="300.0" prefWidth="400.0" text="Nombre" />
+                              <TableColumn fx:id="categoria" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Categoria" />
+                              <TableColumn fx:id="unidades" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Unidades" />
+                              <TableColumn fx:id="precio" maxWidth="200.0" prefWidth="100.0" text="Precio" />
+                              <TableColumn fx:id="fecha" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="fecha" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </center>
+                     <top>
+                        <BorderPane>
+                           <BorderPane.margin>
+                              <Insets />
+                           </BorderPane.margin>
+                           <center>
+                              <HBox scaleZ="48.0" spacing="5.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
+                                    <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" />
+                                 </children>
+                              </HBox>
+                           </center>
+                           <right>
+                              <HBox BorderPane.alignment="CENTER">
+                                 <children>
+                                    <TextField fx:id="buscarText" onKeyPressed="#buscar" />
+                                    <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" />
+                                 </children>
+                              </HBox>
+                           </right>
+                        </BorderPane>
+                     </top>
+                  </BorderPane>
+                  <StackPane fx:id="nuevoGastoPanel" layoutY="35.0" onMousePressed="#nuevoGastoPanelClicked" styleClass="stackPane" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="36.0">
                      <children>
-                        <Separator orientation="VERTICAL" prefHeight="40.0" />
-                        <MenuButton fx:id="toolbarUsername" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Username">
-                          <items>
-                            <MenuItem mnemonicParsing="false" onAction="#perfil" text="Perfil" />
-                            <MenuItem mnemonicParsing="false" onAction="#logout" text="Logout" />
-                          </items>
-                           <graphic>
-                              <ImageView fx:id="toolbarImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../icons/default.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </MenuButton>
+                        <GridPane hgap="5.0" vgap="5.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="LEFT" hgrow="NEVER" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <TextField fx:id="nombreText" onAction="#nextNombre" GridPane.columnIndex="1" />
+                              <TextField fx:id="descripcion" onAction="#nextDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <ChoiceBox fx:id="categoriaText" prefWidth="150.0" />
+                                    <Button fx:id="añadirCategoriaButton" mnemonicParsing="false" onAction="#añadirCategoria" text="Añadir categoria" />
+                                 </children>
+                              </HBox>
+                              <TextField fx:id="coste" onAction="#nextCoste" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="unidadesText" onAction="#nextUnidades" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                              <DatePicker fx:id="fechaGasto" onAction="#nextFecha" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre:" />
+                              <Label alignment="CENTER_RIGHT" text="Descripcion:" GridPane.rowIndex="1" />
+                              <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
+                              <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
+                              <Label alignment="CENTER_RIGHT" text="Unidades:" GridPane.rowIndex="4" />
+                              <Label alignment="CENTER_RIGHT" text="Fecha:" GridPane.rowIndex="5" />
+                              <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                 <children>
+                                    <Button fx:id="añadirGastoButton" mnemonicParsing="false" onAction="#añadirGasto" text="Añadir Gasto" />
+                                    <Text fx:id="errorGasto" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
+                                 </children>
+                              </HBox>
+                              <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
+                              <Button fx:id="facturaButton" mnemonicParsing="false" onAction="#añadirFactura" text="Añadir" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                 <graphic>
+                                    <ImageView fx:id="factura" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic>
+                              </Button>
+                               <Button fx:id="borrarDatosButton" mnemonicParsing="false" onAction="#borrarDatos" text="Borrar datos" GridPane.rowIndex="7" />
+                           </children>
+                           <StackPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </StackPane.margin>
+                        </GridPane>
                      </children>
-                  </HBox>
-               </right>
-            </BorderPane>
-         </top>
+                  </StackPane>
+                  <StackPane fx:id="añadirCategoriaPanel" layoutX="272.0" layoutY="166.0" styleClass="stackPane">
+                     <children>
+                        <GridPane hgap="5.0" vgap="5.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre" />
+                              <TextField fx:id="nombreCategoria" onAction="#nextNombreCategoria" GridPane.columnIndex="1" />
+                              <Label alignment="CENTER_RIGHT" text="Descripcion" GridPane.rowIndex="1" />
+                              <TextField fx:id="descripcionCategoria" onAction="#nextDescripcionCategoria" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" prefHeight="15.0" prefWidth="83.0" text="Confirmar" />
+                                    <Text fx:id="errorCategoria" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                           <StackPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </StackPane.margin>
+                        </GridPane>
+                     </children>
+                  </StackPane>
+                  <StackPane fx:id="filtroPanel" layoutX="694.0" layoutY="25.0" styleClass="stackPane" visible="false">
+                     <children>
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </center>
+   <top>
+      <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" styleClass="topBar" BorderPane.alignment="CENTER">
+         <center>
+            <ToolBar prefHeight="40.0">
+               <items>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Página Principal">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                  </Text>
+               </items>
+            </ToolBar>
+         </center>
+         <right>
+            <HBox alignment="CENTER_RIGHT" minHeight="-Infinity" prefHeight="40.0" styleClass="usernameMenu" BorderPane.alignment="CENTER">
+               <children>
+                  <Separator orientation="VERTICAL" prefHeight="40.0" />
+                  <MenuButton fx:id="toolbarUsername" maxHeight="40.0" minHeight="40.0" mnemonicParsing="false" prefHeight="40.0" style="-fx-background-color: transparent;" text="Username">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#perfil" text="Perfil" />
+                      <MenuItem mnemonicParsing="false" onAction="#logout" text="Logout" />
+                    </items>
+                     <graphic>
+                        <ImageView fx:id="toolbarImage" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../icons/default.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuButton>
+               </children>
+            </HBox>
+         </right>
       </BorderPane>
-   </children>
-</AnchorPane>
+   </top>
+   <stylesheets>
+      <URL value="@../../style/nord-dark.css" />
+      <URL value="@../../style/plantilla.css" />
+   </stylesheets>
+</BorderPane>

@@ -452,29 +452,38 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void contextmenu(ContextMenuEvent event) {
-        ContextMenu cm = new ContextMenu();
-        MenuItem mi1 = new MenuItem("Editar");
-        cm.getItems().add(mi1);
-        MenuItem mi2 = new MenuItem("Imprimir");
-        cm.getItems().add(mi2);
-        cm.show(tabla, event.getScreenX(), event.getScreenY());
-        mi1.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                try {
-                    final Stage dialog = new Stage();
-                    Parent root = FXMLLoader.load(getClass().getResource("../view/EditarGasto.fxml"));
-                    dialog.initModality(Modality.APPLICATION_MODAL);
-                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    dialog.initOwner(stage);
-                    Scene dialogScene = new Scene(root);
-                    dialog.setScene(dialogScene);
-                    dialog.show();
-                } catch (IOException ex) {
-                    Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+        TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
+        int row = pos.getRow();
+        Charge item = tabla.getItems().get(row);
+        if (item != null) {
+            ContextMenu cm = new ContextMenu();
+            MenuItem mi1 = new MenuItem("Editar");
+            cm.getItems().add(mi1);
+            MenuItem mi2 = new MenuItem("Imprimir");
+            cm.getItems().add(mi2);
+            cm.show(tabla, event.getScreenX(), event.getScreenY());
+            mi1.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    try {
+                        final Stage dialog = new Stage();
+                        Parent root = FXMLLoader.load(getClass().getResource("../view/EditarGasto.fxml"));
+                        dialog.initModality(Modality.APPLICATION_MODAL);
+                        ChargeHolder holder = ChargeHolder.getInstance();
+                        // Step 3
+                        holder.setCharge(item);
+                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                        stage.setUserData(item);
+                        dialog.initOwner(stage);
+                        Scene dialogScene = new Scene(root);
+                        dialog.setScene(dialogScene);
+                        dialog.show();
+                    } catch (IOException ex) {
+                        Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
 }

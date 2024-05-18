@@ -487,6 +487,13 @@ public class MainAppController implements Initializable {
                     openEditDialog(item, event);
                 }
             });
+
+            // Adding event filter to hide the context menu on mouse click outside of it
+            tabla.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent event1) -> {
+                if (cm.isShowing()) {
+                    cm.hide();
+                }
+            });
         }
     }
 

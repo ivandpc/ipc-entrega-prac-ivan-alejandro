@@ -34,12 +34,11 @@
         <items>
             <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" SplitPane.resizableWithParent="false">
               <items>
+                  <VBox />
                   <VBox>
                      <children>
                         <PieChart fx:id="piechart" />
-                     </children>
-                  </VBox>
-                  <VBox />
+                     </children></VBox>
               </items>
             </SplitPane>
             <AnchorPane>
@@ -68,6 +67,7 @@
                               <HBox scaleZ="48.0" spacing="5.0">
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
+                                    <Button fx:id="modificarGastoButton" mnemonicParsing="false" onAction="#modificarGasto" text="Modificar Gasto" />
                                     <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" />
                                  </children>
                               </HBox>

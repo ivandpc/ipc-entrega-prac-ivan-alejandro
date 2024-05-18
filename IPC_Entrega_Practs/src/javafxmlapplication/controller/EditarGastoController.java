@@ -4,10 +4,14 @@
  */
 package javafxmlapplication.controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -20,6 +24,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
+import model.Acount;
+import model.AcountDAOException;
+import model.Category;
 import model.Charge;
 
 /**
@@ -38,9 +46,7 @@ public class EditarGastoController implements Initializable {
     @FXML
     private TextField descripcion;
     @FXML
-    private ChoiceBox<?> categoriaText;
-    @FXML
-    private Button añadirCategoriaButton;
+    private ChoiceBox<Category> categoriaText;
     @FXML
     private TextField coste;
     @FXML
@@ -48,15 +54,16 @@ public class EditarGastoController implements Initializable {
     @FXML
     private DatePicker fechaGasto;
     @FXML
-    private Button añadirGastoButton;
-    @FXML
     private Text errorGasto;
     @FXML
     private Button facturaButton;
     @FXML
     private ImageView factura;
+    private Charge charge;
     @FXML
-    private Button borrarDatosButton;
+    private Button confirmarButton;
+    @FXML
+    private Button cancelarButton;
 
     /**
      * Initializes the controller class.
@@ -66,12 +73,31 @@ public class EditarGastoController implements Initializable {
 
     }
 
-    @FXML
-    private void a(MouseEvent event) {
-        ChargeHolder holder = ChargeHolder.getInstance();
-        Charge charge = holder.getCharge();
+    public void setValues(Charge charge) throws AcountDAOException, IOException {
+        this.charge = charge;
         nombreText.setText(charge.getName());
         descripcion.setText(charge.getDescription());
+        List<Category> categories = Acount.getInstance().getUserCategories();
+        categoriaText.setItems(FXCollections.observableArrayList(categories));
+        categoriaText.setConverter(new StringConverter<Category>() {
+            @Override
+            public String toString(Category category) {
+                return category != null ? category.getName() : "";
+            }
+
+            @Override
+            public Category fromString(String string) {
+                return null;
+            }
+        });
+        categoriaText.setValue(charge.getCategory());
+        coste.setText(String.valueOf(charge.getCost()));
+        unidadesText.setText(String.valueOf(charge.getUnits()));
+        fechaGasto.setValue(charge.getDate());
+    }
+
+    @FXML
+    private void a(MouseEvent event) {
         //categoriaText.setValue(charge.getCategory());
         //coste.setText((String)charge.getCost());
 
@@ -83,10 +109,6 @@ public class EditarGastoController implements Initializable {
 
     @FXML
     private void nextDescripcion(ActionEvent event) {
-    }
-
-    @FXML
-    private void añadirCategoria(ActionEvent event) {
     }
 
     @FXML
@@ -102,18 +124,31 @@ public class EditarGastoController implements Initializable {
     }
 
     @FXML
-    private void añadirGasto(ActionEvent event) {
-    }
-
-    @FXML
     private void añadirFactura(ActionEvent event) {
     }
 
     @FXML
-    private void borrarDatos(ActionEvent event) {
+    private void nuevoGastoPanelClicked(MouseEvent event) {
     }
 
     @FXML
-    private void nuevoGastoPanelClicked(MouseEvent event) {
+    private void confirmar(ActionEvent event) throws AcountDAOException, IOException, InstantiationException, IllegalAccessException {
+
+        charge.setName(nombreText.getText());
+        charge.setDescription(descripcion.getText());
+        charge.setCategory(categoriaText.getValue());
+        charge.setCost(Double.parseDouble(coste.getText()));
+        charge.setUnits(Integer.parseInt(unidadesText.getText()));
+        charge.setDate(fechaGasto.getValue());
+        Stage stage = (Stage) confirmarButton.getScene().getWindow();
+        // do what you have to do
+        stage.close();
+    }
+
+    @FXML
+    private void cancelar(ActionEvent event) {
+        Stage stage = (Stage) confirmarButton.getScene().getWindow();
+        // do what you have to do
+        stage.close();
     }
 }

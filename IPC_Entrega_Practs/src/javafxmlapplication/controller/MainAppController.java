@@ -4,6 +4,7 @@
  */
 package javafxmlapplication.controller;
 
+import javafx.scene.paint.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,6 +25,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 //import javafx.css.converter.StringConverter;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,6 +61,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import model.Acount;
 import model.Category;
@@ -67,6 +70,10 @@ import model.AcountDAOException;
 import model.User;
 import model.Category;
 import model.AcountDAO;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.paint.Color;
 
 /**
  * FXML Controller class
@@ -143,19 +150,20 @@ public class MainAppController implements Initializable {
     private DatePicker fechaGasto;
     @FXML
     private Button borrarDatosButton;
+    @FXML
+    private Button modificarGastoButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             //Inicializacion de la tabla principal
             inicializarTabla(Acount.getInstance().getUserCharges());
-        } catch (AcountDAOException ex) {
-            Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (AcountDAOException | IOException ex) {
             Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
         }
         //Inicializa el panel de añadir gasto
         inicializarGastoPanel();
+
     }
 
     private void inicializarGastoPanel() {
@@ -245,6 +253,7 @@ public class MainAppController implements Initializable {
                 if (charge.getCategory().equals(c)) {
                     cost += charge.getCost();
                 }
+
                 datos.add(new PieChart.Data(charge.getCategory().getName(), cost));
             }
 
@@ -415,6 +424,16 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void eliminargasto(ActionEvent event) throws AcountDAOException, IOException {
+        if (tabla.getSelectionModel().isEmpty()) {
+            // If nothing is selected in the table, show an error message
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Debes seleccionar un elemento de la tabla.");
+            alert.showAndWait();
+            return;
+        }
+
         TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
         int row = pos.getRow();
         Charge item = tabla.getItems().get(row);
@@ -465,25 +484,57 @@ public class MainAppController implements Initializable {
             mi1.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    try {
-                        final Stage dialog = new Stage();
-                        Parent root = FXMLLoader.load(getClass().getResource("../view/EditarGasto.fxml"));
-                        dialog.initModality(Modality.APPLICATION_MODAL);
-                        ChargeHolder holder = ChargeHolder.getInstance();
-                        // Step 3
-                        holder.setCharge(item);
-                        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        stage.setUserData(item);
-                        dialog.initOwner(stage);
-                        Scene dialogScene = new Scene(root);
-                        dialog.setScene(dialogScene);
-                        dialog.show();
-                    } catch (IOException ex) {
-                        Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    openEditDialog(item, event);
                 }
             });
         }
+    }
+
+    private void openEditDialog(Charge item, Event event) {
+        try {
+            final Stage dialog = new Stage();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../view/EditarGasto.fxml"));
+            Parent root = (Parent) fxmlLoader.load();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            EditarGastoController childController = fxmlLoader.getController();
+            childController.setValues(item);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setUserData(item);
+            dialog.initOwner(stage);
+            Scene dialogScene = new Scene(root);
+            dialog.setScene(dialogScene);
+            dialog.show();
+            dialog.setOnCloseRequest(closeEvent -> handleDialogClose());
+            dialog.setOnHidden(hiddenEvent -> handleDialogClose());
+        } catch (IOException | AcountDAOException ex) {
+            Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void handleDialogClose() {
+        try {
+            inicializarTabla(Acount.getInstance().getUserCharges());
+        } catch (AcountDAOException | IOException ex) {
+            Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void modificarGasto(ActionEvent event) {
+        if (tabla.getSelectionModel().isEmpty()) {
+            // If nothing is selected in the table, show an error message
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Debes seleccionar un elemento de la tabla.");
+            alert.showAndWait();
+            return;
+        }
+
+        TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
+        int row = pos.getRow();
+        Charge item = tabla.getItems().get(row);
+        openEditDialog(item, event);
     }
 
 }

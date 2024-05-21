@@ -76,7 +76,7 @@ public class PerfilController implements Initializable {
     @FXML
     private ImageView toolbarImage;
     @FXML
-    private TextField password2;
+    private Label username;
 
     /**
      * Initializes the controller class.
@@ -91,32 +91,27 @@ public class PerfilController implements Initializable {
             System.exit(-1);
         }
         toolbarImage.setImage(user.getImage());
+        toolbarUsername.textProperty().bindBidirectional(username.textProperty());
         toolbarUsername.setText(user.getNickName());
 
         perfil.setImage(user.getImage());
-        nombre.setText(user.getName());
-        apellidos.setText(user.getSurname());
-        email.setText(user.getEmail());
+        nombre.setPromptText(user.getName());
+        apellidos.setPromptText(user.getSurname());
+        email.setPromptText(user.getEmail());
     }
 
     @FXML
-    private void confirmar(ActionEvent event) throws AcountDAOException, IOException {
-        if (nombre.getText().isBlank()) {
-            error.setText("Debes introducir un nombre.");
-        } else if (apellidos.getText().isBlank()) {
-            error.setText("Debes introducir los apellidos.");
-        } else if (email.getText().isBlank()) {
-            error.setText("Debes introducir un email.");
-        } else if (!password.getText().equals(password2.getText())) {
-            error.setText("Las contraseñas deben ser iguales");
+    private void confirmar(ActionEvent event) throws IOException {
+        if (!password.getText().isEmpty() && password.getText().length() < 6) {
+            error.setText("La contraseña debe tener más de 6 carácteres");
         } else {
-            user.setImage(perfil.getImage());
-            user.setName(nombre.getText());
-            user.setSurname(apellidos.getText());
-            user.setEmail(email.getText());
-            if (!password.getText().isBlank()) {
-                user.setPassword(password.getText());
-            }
+                user.setImage(perfil.getImage());
+                if (!nombre.getText().isEmpty()) user.setName(nombre.getText());
+                if (!apellidos.getText().isEmpty()) user.setSurname(apellidos.getText());
+                if (!email.getText().isEmpty()) user.setEmail(email.getText());
+                if (!password.getText().isEmpty()) {
+                    user.setPassword(password.getText());
+                }
 
             Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -173,15 +168,8 @@ public class PerfilController implements Initializable {
     }
 
     @FXML
-    private void nextPassword(ActionEvent event) {
+    private void nextPassword(ActionEvent event) throws IOException {
         if (!usuario.getText().isBlank()) {
-            password2.requestFocus();
-        }
-    }
-
-    @FXML
-    private void nextPassword2(ActionEvent event) throws AcountDAOException, IOException {
-        if (!password.getText().isBlank()) {
             confirmar(event);
         }
     }
@@ -189,11 +177,13 @@ public class PerfilController implements Initializable {
     @FXML
     private void logout(ActionEvent event) throws AcountDAOException, IOException {
         if (Acount.getInstance().logOutUser()) {
-            Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/login.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setResizable(true);
+            stage.show();
+            error.getScene().getWindow().hide();
         }
     }
 }

@@ -65,9 +65,6 @@ public class EditarGastoController implements Initializable {
     @FXML
     private Button cancelarButton;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
@@ -147,7 +144,7 @@ public class EditarGastoController implements Initializable {
 
     @FXML
     private void cancelar(ActionEvent event) {
-        Stage stage = (Stage) confirmarButton.getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         // do what you have to do
         stage.close();
     }

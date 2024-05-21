@@ -61,8 +61,6 @@ public class RegistroController implements Initializable {
     private GridPane fondo;
     @FXML
     private Button cancelarBotton;
-    @FXML
-    private PasswordField password2;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -73,17 +71,17 @@ public class RegistroController implements Initializable {
     private Parent root;
 
     @FXML
-    private void aceptarRegistro(ActionEvent event) throws AcountDAOException, IOException {
+    private void aceptarRegistro(ActionEvent event) throws IOException {
         if (nombre.getText().isBlank()) {
             error.setText("Debes introducir tu nombre");
         } else if (apellidos.getText().isBlank()) {
             error.setText("Debes introducir tus apellidos");
         } else if (email.getText().isBlank()) {
             error.setText("Debes introducir tu email");
-        } else if (usuario.getText().isBlank()) {
-            error.setText("Debes introducir un nombre de usuario");
-        } else if (!password.getText().equals(password2.getText())) {
-            error.setText("Las contraseñas deben ser iguales");
+        } else if (usuario.getText().isBlank() || (usuario.getText().indexOf(' ') == -1)) {
+            error.setText("Debes introducir un nombre de usuario valido");
+        } else if (password.getText().length() < 6) {
+            error.setText("La contraseña debe tener más de 6 carácteres");
         } else if (nombre.getText() != null || apellidos.getText() != null || email.getText() != null || usuario.getText() != null || password.getText() != null || LocalDate.now() != null) {
             try {
                 if (Acount.getInstance().registerUser(nombre.getText(), apellidos.getText(), email.getText(), usuario.getText(), password.getText(), avatar, LocalDate.now())) {
@@ -145,13 +143,8 @@ public class RegistroController implements Initializable {
     }
 
     @FXML
-    private void nextPassword(ActionEvent event) {
-        if (!usuario.getText().isBlank()) password2.requestFocus();
-    }
-
-    @FXML
-    private void nextPassword2(ActionEvent event) throws AcountDAOException, IOException {
-        if (!password.getText().isBlank()) aceptarRegistro(event);
+    private void nextPassword(ActionEvent event) throws IOException {
+        if (!usuario.getText().isBlank()) aceptarRegistro(event);
     }
 
 }

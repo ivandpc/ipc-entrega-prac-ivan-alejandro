@@ -159,7 +159,7 @@ public class MainAppController implements Initializable {
             //Inicializacion de la tabla principal
             inicializarTabla(Acount.getInstance().getUserCharges());
         } catch (AcountDAOException | IOException ex) {
-            Logger.getLogger(MainAppController.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Error al cargar la tabla: " + ex);
         }
         //Inicializa el panel de añadir gasto
         inicializarGastoPanel();
@@ -179,16 +179,7 @@ public class MainAppController implements Initializable {
                 unidadesText.setText(oldValue);
             }
         });
-        fechaGasto.setDayCellFactory((DatePicker picker) -> {
-            return new DateCell() {
-                @Override
-                public void updateItem(LocalDate date, boolean empty) {
-                    super.updateItem(date, empty);
-                    LocalDate today = LocalDate.now();
-                    setDisable(empty || date.compareTo(today) < 0);
-                }
-            };
-        });
+        fechaGasto.setValue(LocalDate.now());
     }
 
     private void inicializarCategorias() {
@@ -280,7 +271,6 @@ public class MainAppController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-        //stage.setResizable(false);
         tabla.getScene().getWindow().hide();
     }
 

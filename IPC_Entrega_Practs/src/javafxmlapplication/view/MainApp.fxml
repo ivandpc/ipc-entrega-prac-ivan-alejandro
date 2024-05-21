@@ -130,7 +130,7 @@
                                     <ImageView fx:id="factura" pickOnBounds="true" preserveRatio="true" />
                                  </graphic>
                               </Button>
-                               <Button fx:id="borrarDatosButton" mnemonicParsing="false" onAction="#borrarDatos" text="Borrar datos" GridPane.rowIndex="7" />
+                               <Button fx:id="borrarDatosButton" mnemonicParsing="false" onAction="#borrarDatos" text="Limpiar" GridPane.rowIndex="7" />
                            </children>
                            <StackPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -157,7 +157,7 @@
                               <TextField fx:id="descripcionCategoria" onAction="#nextDescripcionCategoria" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <children>
-                                    <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" prefHeight="15.0" prefWidth="83.0" text="Confirmar" />
+                                    <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" text="Confirmar" />
                                     <Text fx:id="errorCategoria" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
                                  </children>
                               </HBox>

@@ -17,3 +17,10 @@
 .topBar {
     -fx-background-color: #3B4252;
 }
+.chart-legend {
+    -fx-background-color: sienna;
+}
+
+.chart-legend-item {
+    -fx-text-fill: blue; /* Change text color for individual legend items */
+}

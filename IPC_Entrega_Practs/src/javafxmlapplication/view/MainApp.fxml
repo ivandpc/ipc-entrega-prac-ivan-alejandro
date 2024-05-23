@@ -2,7 +2,10 @@
 
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -34,10 +37,20 @@
         <items>
             <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" SplitPane.resizableWithParent="false">
               <items>
-                  <VBox />
+                  <VBox alignment="TOP_CENTER">
+                     <children>
+                        <StackedBarChart fx:id="gastoMensual" animated="false">
+                          <xAxis>
+                            <NumberAxis side="BOTTOM" fx:id="xAxis" />
+                          </xAxis>
+                          <yAxis>
+                            <CategoryAxis fx:id="yAxis" side="LEFT" />
+                          </yAxis>
+                        </StackedBarChart>
+                     </children></VBox>
                   <VBox>
                      <children>
-                        <PieChart fx:id="piechart" />
+                        <PieChart fx:id="piechart" animated="false" />
                      </children></VBox>
               </items>
             </SplitPane>
@@ -69,6 +82,7 @@
                                     <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
                                     <Button fx:id="modificarGastoButton" mnemonicParsing="false" onAction="#modificarGasto" text="Modificar Gasto" />
                                     <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" />
+                                    <Button mnemonicParsing="false" onAction="#imprimir" text="Imprimir" />
                                  </children>
                               </HBox>
                            </center>
@@ -193,7 +207,7 @@
          <center>
             <ToolBar prefHeight="40.0">
                <items>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Página Principal">
+                  <Text fx:id="topText" strokeType="OUTSIDE" strokeWidth="0.0" text="Página Principal">
                      <font>
                         <Font size="23.0" />
                      </font>

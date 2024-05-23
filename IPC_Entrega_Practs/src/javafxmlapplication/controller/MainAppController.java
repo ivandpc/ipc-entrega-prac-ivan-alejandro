@@ -11,9 +11,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,9 +33,16 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
+import javafx.print.PageLayout;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -71,9 +81,13 @@ import model.User;
 import model.Category;
 import model.AcountDAO;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Scale;
 
 /**
  * FXML Controller class
@@ -152,6 +166,14 @@ public class MainAppController implements Initializable {
     private Button borrarDatosButton;
     @FXML
     private Button modificarGastoButton;
+    @FXML
+    private Text topText;
+    @FXML
+    private StackedBarChart<String, Double> gastoMensual;
+    @FXML
+    private CategoryAxis yAxis;
+    @FXML
+    private NumberAxis xAxis;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -162,12 +184,15 @@ public class MainAppController implements Initializable {
             System.err.println("Error al cargar la tabla: " + ex);
         }
         //Inicializa el panel de añadir gasto
+        topText.setText("Bienvendido, " + acount.getLoggedUser().getName());
+
         inicializarGastoPanel();
 
     }
 
     private void inicializarGastoPanel() {
         inicializarCategorias();
+
         //Filtrar solo los numeros decimales
         coste.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {
@@ -180,6 +205,7 @@ public class MainAppController implements Initializable {
             }
         });
         fechaGasto.setValue(LocalDate.now());
+
     }
 
     private void inicializarCategorias() {
@@ -202,6 +228,7 @@ public class MainAppController implements Initializable {
             System.err.println(e);
         }
     }
+    XYChart.Series series1;
 
     public void inicializarTabla(List<Charge> s) {
         try {
@@ -238,17 +265,32 @@ public class MainAppController implements Initializable {
             añadirCategoriaPanel.setVisible(false);
             List<Category> categories = acount.getUserCategories();
             ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
-            for (Charge charge : charges) {
-                double cost = 0;
-                Category c = charge.getCategory();
-                if (charge.getCategory().equals(c)) {
-                    cost += charge.getCost();
-                }
+            series1 = new XYChart.Series<>();
+            Map<Month, Double> monthlyExpenses = new HashMap<>();
+            double totalMonthlyExpense = 0;
 
+            for (Charge charge : charges) {
+                double cost = charge.getCost();
+                Month month = charge.getDate().getMonth();
+                monthlyExpenses.put(month, monthlyExpenses.getOrDefault(month, 0.0) + cost);
+                if (month.equals(LocalDate.now().getMonth())) {
+                    totalMonthlyExpense += cost;
+                }
                 datos.add(new PieChart.Data(charge.getCategory().getName(), cost));
             }
 
-            piechart.setData(datos);
+            series1.getData().clear();
+            for (Map.Entry<Month, Double> entry : monthlyExpenses.entrySet()) {
+                series1.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey().toString()));
+            }
+
+            gastoMensual.setTitle("Gasto mensual: " + "\n" + totalMonthlyExpense + "$");
+            
+            if (!buscarText.isFocused()) {
+                gastoMensual.getData().clear();
+                gastoMensual.getData().addAll(series1);
+                piechart.setData(datos);
+            }
         } catch (AcountDAOException | IOException ex) {
             System.err.println(ex);
         }
@@ -415,7 +457,7 @@ public class MainAppController implements Initializable {
     @FXML
     private void eliminargasto(ActionEvent event) throws AcountDAOException, IOException {
         if (tabla.getSelectionModel().isEmpty()) {
-            // If nothing is selected in the table, show an error message
+            // If nothing is selected in the tabla, show an error message
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -477,6 +519,12 @@ public class MainAppController implements Initializable {
                     openEditDialog(item, event);
                 }
             });
+            mi2.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent e) {
+                    imprimir(e);
+                }
+            });
 
             // Adding event filter to hide the context menu on mouse click outside of it
             tabla.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent event1) -> {
@@ -519,7 +567,7 @@ public class MainAppController implements Initializable {
     @FXML
     private void modificarGasto(ActionEvent event) {
         if (tabla.getSelectionModel().isEmpty()) {
-            // If nothing is selected in the table, show an error message
+            // If nothing is selected in the tabla, show an error message
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -532,6 +580,33 @@ public class MainAppController implements Initializable {
         int row = pos.getRow();
         Charge item = tabla.getItems().get(row);
         openEditDialog(item, event);
+    }
+
+    @FXML
+    private void imprimir(ActionEvent event) {
+        PrinterJob job = PrinterJob.createPrinterJob();
+
+        if (job != null && job.showPrintDialog(tabla.getScene().getWindow())) {
+            PageLayout pageLayout = job.getJobSettings().getPageLayout();
+            double pWidth = pageLayout.getPrintableWidth();
+            double pHeight = pageLayout.getPrintableHeight();
+
+            double nWidth = tabla.getBoundsInParent().getWidth();
+            double nHeight = tabla.getBoundsInParent().getHeight();
+
+            double scale = Math.min(pWidth / nWidth, pHeight / nHeight);
+            tabla.getTransforms().add(new Scale(scale, scale));
+
+            boolean printed = job.printPage(tabla);
+
+            if (printed) {
+                job.endJob();
+            } else {
+                System.out.println("Failed to print the page.");
+            }
+
+            tabla.getTransforms().remove(tabla.getTransforms().size() - 1);
+        }
     }
 
 }

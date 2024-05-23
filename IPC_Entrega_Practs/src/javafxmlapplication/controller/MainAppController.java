@@ -4,7 +4,6 @@
  */
 package javafxmlapplication.controller;
 
-import javafx.scene.paint.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,17 +12,12 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.TextFormatter;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 //import javafx.css.converter.StringConverter;
@@ -33,25 +27,17 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Side;
-import javafx.print.PageLayout;
-import javafx.print.Printer;
-import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
@@ -62,33 +48,31 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import model.Acount;
-import model.Category;
 import model.Charge;
 import model.AcountDAOException;
 import model.User;
 import model.Category;
-import model.AcountDAO;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Label;
-import javafx.scene.paint.Color;
-import javafx.scene.transform.Scale;
-
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
 /**
  * FXML Controller class
  *
@@ -285,7 +269,7 @@ public class MainAppController implements Initializable {
             }
 
             gastoMensual.setTitle("Gasto mensual: " + "\n" + totalMonthlyExpense + "$");
-            
+
             if (!buscarText.isFocused()) {
                 gastoMensual.getData().clear();
                 gastoMensual.getData().addAll(series1);
@@ -556,7 +540,7 @@ public class MainAppController implements Initializable {
         }
     }
 
-    private void handleDialogClose() {
+    public void handleDialogClose() {
         try {
             inicializarTabla(Acount.getInstance().getUserCharges());
         } catch (AcountDAOException | IOException ex) {
@@ -584,28 +568,48 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void imprimir(ActionEvent event) {
-        PrinterJob job = PrinterJob.createPrinterJob();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save PDF");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+        File file = fileChooser.showSaveDialog(tabla.getScene().getWindow());
 
-        if (job != null && job.showPrintDialog(tabla.getScene().getWindow())) {
-            PageLayout pageLayout = job.getJobSettings().getPageLayout();
-            double pWidth = pageLayout.getPrintableWidth();
-            double pHeight = pageLayout.getPrintableHeight();
+        if (file != null) {
+            try {
+                PdfWriter writer = new PdfWriter(file);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf, PageSize.A4);
 
-            double nWidth = tabla.getBoundsInParent().getWidth();
-            double nHeight = tabla.getBoundsInParent().getHeight();
+                // Add title to the document
+                document.add(new Paragraph("Expense Report").setBold().setFontSize(20).setTextAlignment(TextAlignment.CENTER));
 
-            double scale = Math.min(pWidth / nWidth, pHeight / nHeight);
-            tabla.getTransforms().add(new Scale(scale, scale));
+                // Create a table with the same columns as the TableView
+                float[] pointColumnWidths = {150F, 150F, 150F, 150F, 150F};
+                Table table = new Table(pointColumnWidths);
 
-            boolean printed = job.printPage(tabla);
+                // Add table headers
+                table.addHeaderCell(new Cell().add(new Paragraph("Nombre")));
+                table.addHeaderCell(new Cell().add(new Paragraph("Categoria")));
+                table.addHeaderCell(new Cell().add(new Paragraph("Unidades")));
+                table.addHeaderCell(new Cell().add(new Paragraph("Precio")));
+                table.addHeaderCell(new Cell().add(new Paragraph("Fecha")));
 
-            if (printed) {
-                job.endJob();
-            } else {
-                System.out.println("Failed to print the page.");
+                // Add rows to the table
+                for (Charge charge : tabla.getItems()) {
+                    table.addCell(new Cell().add(new Paragraph(charge.getName())));
+                    table.addCell(new Cell().add(new Paragraph(charge.getCategory().getName())));
+                    table.addCell(new Cell().add(new Paragraph(String.valueOf(charge.getUnits()))));
+                    table.addCell(new Cell().add(new Paragraph(String.valueOf(charge.getCost()))));
+                    table.addCell(new Cell().add(new Paragraph(charge.getDate().toString())));
+                }
+
+                // Add table to the document
+                document.add(table);
+                document.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            tabla.getTransforms().remove(tabla.getTransforms().size() - 1);
         }
     }
 

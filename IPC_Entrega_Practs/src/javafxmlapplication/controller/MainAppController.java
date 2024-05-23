@@ -73,6 +73,8 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 /**
  * FXML Controller class
  *
@@ -171,6 +173,9 @@ public class MainAppController implements Initializable {
         topText.setText("Bienvendido, " + acount.getLoggedUser().getName());
 
         inicializarGastoPanel();
+        
+        eliminargastobutton.disableProperty().bind(Bindings.equal(-1, tabla.getSelectionModel().selectedIndexProperty()));
+        modificarGastoButton.disableProperty().bind(Bindings.equal(-1, tabla.getSelectionModel().selectedIndexProperty()));
 
     }
 
@@ -268,7 +273,7 @@ public class MainAppController implements Initializable {
                 series1.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey().toString()));
             }
 
-            gastoMensual.setTitle("Gasto mensual: " + "\n" + totalMonthlyExpense + "$");
+            gastoMensual.setTitle("Gasto mensual: " + "\n" + totalMonthlyExpense + "€");
 
             if (!buscarText.isFocused()) {
                 gastoMensual.getData().clear();
@@ -551,11 +556,11 @@ public class MainAppController implements Initializable {
     @FXML
     private void modificarGasto(ActionEvent event) {
         if (tabla.getSelectionModel().isEmpty()) {
-            // If nothing is selected in the tabla, show an error message
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("Debes seleccionar un elemento de la tabla.");
+            alert.getDialogPane().getStylesheets().add(getClass().getResource("../../style/nord-dark.css").toExternalForm());
             alert.showAndWait();
             return;
         }

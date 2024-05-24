@@ -68,7 +68,7 @@
                         <PasswordField fx:id="password" onAction="#nextPassword" />
                      </children>
                   </VBox>
-                  <Label fx:id="error" textFill="RED" />
+                  <Label fx:id="error" styleClass="errorText" textFill="RED" />
                   <HBox alignment="CENTER" spacing="5.0">
                      <children>
                         <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />

@@ -36,7 +36,6 @@ public class JavaFXMLApplication extends Application {
         stage.setMinWidth(600);
         stage.getIcons().add(new Image("/icons/icono.png"));
         stage.show();
-        //stage.setResizable(false);
     }
     
     public static void main(String[] args) {

@@ -20,11 +20,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -56,8 +58,6 @@ public class EditarGastoController implements Initializable {
     @FXML
     private DatePicker fechaGasto;
     @FXML
-    private Text errorGasto;
-    @FXML
     private Button facturaButton;
     @FXML
     private ImageView factura;
@@ -66,13 +66,18 @@ public class EditarGastoController implements Initializable {
     private Button confirmarButton;
     @FXML
     private Button cancelarButton;
+    @FXML
+    private GridPane fondo;
+    @FXML
+    private Label error;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        
     }
 
     public void setValues(Charge charge) throws AcountDAOException, IOException {
+        
         this.charge = charge;
         nombreText.setPromptText(charge.getName());
         descripcion.setPromptText(charge.getDescription());
@@ -143,7 +148,7 @@ public class EditarGastoController implements Initializable {
             factura.setFitWidth(200);
             factura.setFitHeight(375);
         } catch (FileNotFoundException ex) {
-            errorGasto.setText("No se ha podido importar la factura");
+            error.setText("No se ha podido importar la factura");
         } catch (Exception e) {
             System.err.println(e);
         }
@@ -171,5 +176,10 @@ public class EditarGastoController implements Initializable {
     private void cancelar(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    @FXML
+    private void fondoClicked(MouseEvent event) {
+        fondo.requestFocus();
     }
 }

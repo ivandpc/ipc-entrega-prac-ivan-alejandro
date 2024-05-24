@@ -33,28 +33,30 @@
 
 <BorderPane prefHeight="720.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
    <center>
-      <SplitPane dividerPositions="0.15" maxHeight="680.0" maxWidth="1200.0">
-        <items>
-            <SplitPane dividerPositions="0.5" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="680.0" prefWidth="300.0" SplitPane.resizableWithParent="false">
+      <HBox alignment="CENTER">
+         <children>
+            <SplitPane dividerPositions="0.5" maxWidth="500.0" orientation="VERTICAL" prefHeight="680.0" prefWidth="300.0" HBox.hgrow="SOMETIMES">
               <items>
                   <VBox alignment="TOP_CENTER">
                      <children>
-                        <StackedBarChart fx:id="gastoMensual" animated="false">
+                        <StackedBarChart fx:id="gastoMensual" animated="false" horizontalGridLinesVisible="false" legendVisible="false">
                           <xAxis>
-                            <NumberAxis side="BOTTOM" fx:id="xAxis" />
+                            <CategoryAxis animated="false" side="BOTTOM" fx:id="xAxis" />
                           </xAxis>
                           <yAxis>
-                            <CategoryAxis fx:id="yAxis" side="LEFT" />
+                            <NumberAxis fx:id="yAxis" side="LEFT" />
                           </yAxis>
                         </StackedBarChart>
-                     </children></VBox>
+                     </children>
+                  </VBox>
                   <VBox>
                      <children>
                         <PieChart fx:id="piechart" animated="false" />
-                     </children></VBox>
+                     </children>
+                  </VBox>
               </items>
             </SplitPane>
-            <AnchorPane prefHeight="680.0" prefWidth="800.0">
+            <AnchorPane prefHeight="680.0" prefWidth="800.0" HBox.hgrow="SOMETIMES">
                <children>
                   <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <center>
@@ -97,7 +99,7 @@
                         </BorderPane>
                      </top>
                   </BorderPane>
-                  <StackPane fx:id="nuevoGastoPanel" layoutY="35.0" onMousePressed="#nuevoGastoPanelClicked" styleClass="stackPane" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="36.0">
+                  <StackPane fx:id="nuevoGastoPanel" layoutX="2.0" layoutY="35.0" onMousePressed="#nuevoGastoPanelClicked" prefHeight="357.0" prefWidth="408.0" styleClass="stackPane" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="36.0">
                      <children>
                         <GridPane hgap="5.0" vgap="5.0">
                            <columnConstraints>
@@ -135,7 +137,7 @@
                               <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                  <children>
                                     <Button fx:id="añadirGastoButton" mnemonicParsing="false" onAction="#añadirGasto" text="Añadir Gasto" />
-                                    <Text fx:id="errorGasto" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
+                                    <Label fx:id="errorGasto" styleClass="errorText" />
                                  </children>
                               </HBox>
                               <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
@@ -152,7 +154,7 @@
                         </GridPane>
                      </children>
                   </StackPane>
-                  <StackPane fx:id="añadirCategoriaPanel" layoutX="272.0" layoutY="166.0" styleClass="stackPane" visible="false">
+                  <StackPane fx:id="añadirCategoriaPanel" layoutX="272.0" layoutY="166.0" styleClass="stackPane">
                      <children>
                         <GridPane hgap="5.0" vgap="5.0">
                            <columnConstraints>
@@ -172,7 +174,7 @@
                               <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <children>
                                     <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" text="Confirmar" />
-                                    <Text fx:id="errorCategoria" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
+                                    <Label fx:id="errorCategoria" styleClass="errorText" />
                                  </children>
                               </HBox>
                            </children>
@@ -182,25 +184,24 @@
                         </GridPane>
                      </children>
                   </StackPane>
-                  <StackPane fx:id="filtroPanel" layoutX="694.0" layoutY="25.0" styleClass="stackPane" visible="false">
+                  <StackPane fx:id="filtroPanel" layoutX="558.0" layoutY="36.0" prefHeight="142.0" prefWidth="180.0" styleClass="stackPane" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0">
                      <children>
-                        <GridPane>
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                        </GridPane>
+                        <VBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <Button mnemonicParsing="false" onAction="#gastoMensual" prefHeight="36.0" prefWidth="118.0" text="Gasto mensual" />
+                              <Button mnemonicParsing="false" onAction="#gastoTrimestral" prefHeight="36.0" prefWidth="118.0" text="Gasto trimestal" />
+                              <Button mnemonicParsing="false" onAction="#gastoAnual" prefHeight="36.0" prefWidth="118.0" text="Gasto anual" />
+                           </children>
+                           <StackPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </StackPane.margin>
+                        </VBox>
                      </children>
                   </StackPane>
                </children>
             </AnchorPane>
-        </items>
-      </SplitPane>
+         </children>
+      </HBox>
    </center>
    <top>
       <BorderPane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" styleClass="topBar" BorderPane.alignment="CENTER">

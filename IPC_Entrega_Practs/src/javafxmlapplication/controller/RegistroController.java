@@ -78,8 +78,8 @@ public class RegistroController implements Initializable {
             error.setText("Debes introducir tus apellidos");
         } else if (email.getText().isBlank()) {
             error.setText("Debes introducir tu email");
-        } else if (usuario.getText().isBlank() || (usuario.getText().indexOf(' ') == -1)) {
-            error.setText("Debes introducir un nombre de usuario valido");
+        } else if (usuario.getText().isBlank() || (usuario.getText().indexOf(' ') != -1)) {
+            error.setText("Debes introducir un usuario valido");
         } else if (password.getText().length() < 6) {
             error.setText("La contraseña debe tener más de 6 carácteres");
         } else if (nombre.getText() != null || apellidos.getText() != null || email.getText() != null || usuario.getText() != null || password.getText() != null || LocalDate.now() != null) {

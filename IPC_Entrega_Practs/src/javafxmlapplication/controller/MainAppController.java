@@ -75,6 +75,7 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.scene.control.Label;
 /**
  * FXML Controller class
  *
@@ -134,11 +135,11 @@ public class MainAppController implements Initializable {
     @FXML
     private Button facturaButton;
     @FXML
-    private Text errorGasto;
+    private Label errorGasto;
     @FXML
     private ChoiceBox<Category> categoriaText;
     @FXML
-    private Text errorCategoria;
+    private Label errorCategoria;
     private TextField unidadestext;
     @FXML
     private Button eliminargastobutton;
@@ -157,9 +158,11 @@ public class MainAppController implements Initializable {
     @FXML
     private StackedBarChart<String, Double> gastoMensual;
     @FXML
-    private CategoryAxis yAxis;
+    private NumberAxis yAxis;
     @FXML
-    private NumberAxis xAxis;
+    private CategoryAxis xAxis;
+    @FXML
+    private Button imprimirButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -252,6 +255,7 @@ public class MainAppController implements Initializable {
             tabla.setItems(FXCollections.observableList(charges));
             nuevoGastoPanel.setVisible(false);
             añadirCategoriaPanel.setVisible(false);
+            filtroPanel.setVisible(false);
             List<Category> categories = acount.getUserCategories();
             ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
             series1 = new XYChart.Series<>();
@@ -270,10 +274,10 @@ public class MainAppController implements Initializable {
 
             series1.getData().clear();
             for (Map.Entry<Month, Double> entry : monthlyExpenses.entrySet()) {
-                series1.getData().add(new XYChart.Data<>(entry.getValue(), entry.getKey().toString()));
+                series1.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue()));
             }
 
-            gastoMensual.setTitle("Gasto mensual: " + "\n" + totalMonthlyExpense + "€");
+            gastoMensual.setTitle("Gasto mensual: " + totalMonthlyExpense + "€");
 
             if (!buscarText.isFocused()) {
                 gastoMensual.getData().clear();
@@ -289,7 +293,7 @@ public class MainAppController implements Initializable {
     private void perfil(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/perfil.fxml"));
         Parent root = loader.load();
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, errorGasto.getScene().getWidth(), errorGasto.getScene().getHeight());
         Stage stage = (Stage) tabla.getScene().getWindow();
         stage.setScene(scene);
     }
@@ -306,14 +310,17 @@ public class MainAppController implements Initializable {
     }
 
     @FXML
-    private void nuevoGasto(ActionEvent event) throws IOException {
+    private void nuevoGasto(ActionEvent event) {
         nuevoGastoPanel.setVisible(!nuevoGastoPanel.visibleProperty().getValue());
         añadirCategoriaPanel.setVisible(false);
+        filtroPanel.setVisible(false);
     }
 
     @FXML
     private void filtro(ActionEvent event) {
         filtroPanel.setVisible(!filtroPanel.visibleProperty().getValue());
+        nuevoGastoPanel.setVisible(false);
+        añadirCategoriaPanel.setVisible(false);
     }
 
     @FXML
@@ -534,9 +541,13 @@ public class MainAppController implements Initializable {
             childController.setValues(item);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setUserData(item);
+            stage.setTitle("Editar gasto");
+            stage.getIcons().add(new Image("/icons/icono.png"));
             dialog.initOwner(stage);
             Scene dialogScene = new Scene(root);
             dialog.setScene(dialogScene);
+            dialog.setMinWidth(500);
+            dialog.setMinHeight(300);
             dialog.show();
             dialog.setOnCloseRequest(closeEvent -> handleDialogClose());
             dialog.setOnHidden(hiddenEvent -> handleDialogClose());
@@ -616,6 +627,18 @@ public class MainAppController implements Initializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    @FXML
+    private void gastoMensual(ActionEvent event) {
+    }
+
+    @FXML
+    private void gastoTrimestral(ActionEvent event) {
+    }
+
+    @FXML
+    private void gastoAnual(ActionEvent event) {
     }
 
 }

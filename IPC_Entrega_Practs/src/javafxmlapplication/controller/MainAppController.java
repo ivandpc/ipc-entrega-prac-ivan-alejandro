@@ -269,9 +269,9 @@ public class MainAppController implements Initializable {
                 double cost = charge.getCost();
                 Month month = charge.getDate().getMonth();
                 monthlyExpenses.put(month, monthlyExpenses.getOrDefault(month, 0.0) + cost);
-                if (month.equals(LocalDate.now().getMonth())) {
+                //if (month.equals(LocalDate.now().getMonth())) {
                     totalMonthlyExpense += cost;
-                }
+                //}
                 datos.add(new PieChart.Data(charge.getCategory().getName(), cost));
             }
 
@@ -656,6 +656,7 @@ public class MainAppController implements Initializable {
             List<Charge> s = new ArrayList();
             int mes = LocalDate.now().getMonth().getValue();
             if (mes < 3) mes = 1;
+            else mes += -3;
             for (Charge c : charges) {
                 if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(), mes, 1))) {
                     s.add(c);
@@ -674,7 +675,7 @@ public class MainAppController implements Initializable {
             List<Charge> charges = acount.getUserCharges();
             List<Charge> s = new ArrayList();
             for (Charge c : charges) {
-                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear() - 1,LocalDate.now().getMonth().getValue(),1))) {
+                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(),1,1))) {
                     s.add(c);
                 }
             }
@@ -695,5 +696,4 @@ public class MainAppController implements Initializable {
             System.err.println(ex);
         }
     }
-
 }

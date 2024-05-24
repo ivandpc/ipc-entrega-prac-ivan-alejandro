@@ -69,6 +69,7 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
@@ -76,6 +77,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
+import javax.security.auth.login.AccountException;
 /**
  * FXML Controller class
  *
@@ -221,7 +223,8 @@ public class MainAppController implements Initializable {
         }
     }
     XYChart.Series series1;
-
+    double totalMonthlyExpense = 0;
+    
     public void inicializarTabla(List<Charge> s) {
         try {
             acount = Acount.getInstance();
@@ -260,7 +263,7 @@ public class MainAppController implements Initializable {
             ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
             series1 = new XYChart.Series<>();
             Map<Month, Double> monthlyExpenses = new HashMap<>();
-            double totalMonthlyExpense = 0;
+            totalMonthlyExpense = 0;
 
             for (Charge charge : charges) {
                 double cost = charge.getCost();
@@ -597,21 +600,18 @@ public class MainAppController implements Initializable {
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf, PageSize.A4);
 
-                // Add title to the document
-                document.add(new Paragraph("Expense Report").setBold().setFontSize(20).setTextAlignment(TextAlignment.CENTER));
+                document.add(new Paragraph("Resumen cuenta de gastos").setBold().setFontSize(20).setTextAlignment(TextAlignment.CENTER));
+                document.add(new Paragraph("").setBold().setFontSize(20).setTextAlignment(TextAlignment.CENTER));
 
-                // Create a table with the same columns as the TableView
                 float[] pointColumnWidths = {150F, 150F, 150F, 150F, 150F};
                 Table table = new Table(pointColumnWidths);
 
-                // Add table headers
                 table.addHeaderCell(new Cell().add(new Paragraph("Nombre")));
                 table.addHeaderCell(new Cell().add(new Paragraph("Categoria")));
                 table.addHeaderCell(new Cell().add(new Paragraph("Unidades")));
                 table.addHeaderCell(new Cell().add(new Paragraph("Precio")));
                 table.addHeaderCell(new Cell().add(new Paragraph("Fecha")));
 
-                // Add rows to the table
                 for (Charge charge : tabla.getItems()) {
                     table.addCell(new Cell().add(new Paragraph(charge.getName())));
                     table.addCell(new Cell().add(new Paragraph(charge.getCategory().getName())));
@@ -620,25 +620,80 @@ public class MainAppController implements Initializable {
                     table.addCell(new Cell().add(new Paragraph(charge.getDate().toString())));
                 }
 
-                // Add table to the document
                 document.add(table);
+                
+                document.add(new Paragraph("\n"));
+                document.add(new Paragraph("Gasto " + modoGasto +  ": " + totalMonthlyExpense + "€"));
+                
                 document.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                System.err.println(ex);
             }
+        }
+    }
+    String modoGasto = "total";
+    @FXML
+    private void gastoMensual(ActionEvent event) {
+        try {
+            List<Charge> charges = acount.getUserCharges();
+            List<Charge> s = new ArrayList();
+            for (Charge c : charges) {
+                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonth().getValue(),1))) {
+                    s.add(c);
+                }
+            }
+            inicializarTabla(s);
+            modoGasto = "mensual";
+        } catch (AcountDAOException ex) {
+            System.err.println(ex);
         }
     }
 
     @FXML
-    private void gastoMensual(ActionEvent event) {
-    }
-
-    @FXML
     private void gastoTrimestral(ActionEvent event) {
+        try {
+            List<Charge> charges = acount.getUserCharges();
+            List<Charge> s = new ArrayList();
+            int mes = LocalDate.now().getMonth().getValue();
+            if (mes < 3) mes = 1;
+            for (Charge c : charges) {
+                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(), mes, 1))) {
+                    s.add(c);
+                }
+            }
+            inicializarTabla(s);
+            modoGasto = "trimestral";
+        } catch (AcountDAOException ex) {
+            System.err.println(ex);
+        }
     }
 
     @FXML
     private void gastoAnual(ActionEvent event) {
+        try {
+            List<Charge> charges = acount.getUserCharges();
+            List<Charge> s = new ArrayList();
+            for (Charge c : charges) {
+                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear() - 1,LocalDate.now().getMonth().getValue(),1))) {
+                    s.add(c);
+                }
+            }
+            inicializarTabla(s);
+            modoGasto = "anual";
+        } catch (AcountDAOException ex) {
+            System.err.println(ex);
+        }
+    }
+
+    @FXML
+    private void gastoTotal(ActionEvent event) {
+        try {
+            List<Charge> charges = acount.getUserCharges();
+            inicializarTabla(charges);
+            modoGasto = "total";
+        } catch (AcountDAOException ex) {
+            System.err.println(ex);
+        }
     }
 
 }

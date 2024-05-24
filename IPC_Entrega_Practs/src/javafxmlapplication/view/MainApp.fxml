@@ -191,6 +191,7 @@
                               <Button mnemonicParsing="false" onAction="#gastoMensual" prefHeight="36.0" prefWidth="118.0" text="Gasto mensual" />
                               <Button mnemonicParsing="false" onAction="#gastoTrimestral" prefHeight="36.0" prefWidth="118.0" text="Gasto trimestal" />
                               <Button mnemonicParsing="false" onAction="#gastoAnual" prefHeight="36.0" prefWidth="118.0" text="Gasto anual" />
+                              <Button mnemonicParsing="false" onAction="#gastoTotal" prefHeight="36.0" prefWidth="118.0" text="Gasto total" />
                            </children>
                            <StackPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

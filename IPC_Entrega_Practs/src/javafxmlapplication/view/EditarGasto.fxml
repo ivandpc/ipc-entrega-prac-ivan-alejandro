@@ -13,64 +13,66 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="fondo" onMousePressed="#fondoClicked" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.EditarGastoController">
+<GridPane fx:id="fondo" onMousePressed="#fondoClicked" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.EditarGastoController">
    <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1000.0" prefWidth="600.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="600.0" minWidth="400.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="600.0" prefHeight="400.0" vgrow="ALWAYS" />
-      <RowConstraints minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="600.0" vgrow="ALWAYS" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <GridPane hgap="5.0" minHeight="300.0" minWidth="500.0" prefHeight="400.0" prefWidth="600.0" vgap="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <GridPane hgap="10.0" vgap="10.0">
          <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" />
-            <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" />
+            <ColumnConstraints halignment="RIGHT" minWidth="100.0" />
+            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+            <ColumnConstraints />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
+            <Label alignment="CENTER_RIGHT" text="Nombre:" />
             <TextField fx:id="nombreText" onAction="#nextNombre" GridPane.columnIndex="1" />
+            
+                        <Label alignment="CENTER_RIGHT" text="Descripcion:" GridPane.rowIndex="1" />
             <TextField fx:id="descripcion" onAction="#nextDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            
+                        <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
             <ChoiceBox fx:id="categoriaText" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            
+                        <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
             <TextField fx:id="coste" onAction="#nextCoste" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            
+                        <Label alignment="CENTER_RIGHT" text="Unidades:" GridPane.rowIndex="4" />
             <TextField fx:id="unidadesText" onAction="#nextUnidades" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            
+                        <Label alignment="CENTER_RIGHT" text="Fecha:" GridPane.rowIndex="5" />
             <DatePicker fx:id="fechaGasto" onAction="#nextFecha" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre:" />
-            <Label alignment="CENTER_RIGHT" text="Descripcion:" GridPane.rowIndex="1" />
-            <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
-            <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
-            <Label alignment="CENTER_RIGHT" text="Unidades:" GridPane.rowIndex="4" />
-            <Label alignment="CENTER_RIGHT" text="Fecha:" GridPane.rowIndex="5" />
-            <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+            
+                        <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
+            <Button fx:id="facturaButton" mnemonicParsing="false" onAction="#añadirFactura" text="Cambiar" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            
+                        <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                <children>
-                  <Button fx:id="confirmarButton" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#confirmar" prefHeight="36.0" prefWidth="100.0" text="Confirmar" />
+                  <Button fx:id="confirmarButton" mnemonicParsing="false" onAction="#confirmar" prefHeight="36.0" prefWidth="100.0" text="Confirmar" />
+                  <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cancelar" prefHeight="36.0" prefWidth="102.0" text="Cancelar" />
                   <Label fx:id="error" styleClass="errorText" />
                </children>
             </HBox>
-            <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
-            <Button fx:id="facturaButton" mnemonicParsing="false" onAction="#añadirFactura" text="Cambiar" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cancelar" prefHeight="36.0" prefWidth="102.0" text="Cancelar" GridPane.rowIndex="7" />
-            <ImageView fx:id="factura" fitHeight="374.0" fitWidth="228.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2147483647" GridPane.vgrow="ALWAYS">
-               <GridPane.margin>
-                  <Insets left="20.0" />
-               </GridPane.margin>
-            </ImageView>
+            
+                        <ImageView fx:id="factura" fitHeight="374.0" fitWidth="228.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowSpan="8" />
          </children>
          <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
       </GridPane>
    </children>

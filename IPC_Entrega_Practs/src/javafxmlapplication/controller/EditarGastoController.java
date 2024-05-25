@@ -28,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -79,8 +80,8 @@ public class EditarGastoController implements Initializable {
     public void setValues(Charge charge) throws AcountDAOException, IOException {
         
         this.charge = charge;
-        nombreText.setPromptText(charge.getName());
-        descripcion.setPromptText(charge.getDescription());
+        nombreText.setText(charge.getName());
+        descripcion.setText(charge.getDescription());
         List<Category> categories = Acount.getInstance().getUserCategories();
         categoriaText.setItems(FXCollections.observableArrayList(categories));
         categoriaText.setConverter(new StringConverter<Category>() {
@@ -95,8 +96,8 @@ public class EditarGastoController implements Initializable {
             }
         });
         categoriaText.setValue(charge.getCategory());
-        coste.setPromptText(String.valueOf(charge.getCost()));
-        unidadesText.setPromptText(String.valueOf(charge.getUnits()));
+        coste.setText(String.valueOf(charge.getCost()));
+        unidadesText.setText(String.valueOf(charge.getUnits()));
         fechaGasto.setValue(charge.getDate());
         if (charge.getImageScan() != null) {
             factura.setImage(charge.getImageScan());

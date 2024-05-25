@@ -361,23 +361,19 @@ public class MainAppController implements Initializable {
     private Image avatar;
 
     @FXML
-    private void añadirFactura(ActionEvent event) {
+    private void añadirFactura(ActionEvent event) throws FileNotFoundException {
         FileChooser fc = new FileChooser();
 
-        try {
-            file = fc.showOpenDialog(null);
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
+
+        File file = fc.showOpenDialog(null);
+
+        if (file != null) {
             String url = file.getAbsolutePath();
-            if (!url.contains(".png")) {
-                throw new FileNotFoundException();
-            }
-            avatar = new Image(new FileInputStream(url));
+            Image avatar = new Image(new FileInputStream(url));
             factura.setImage(avatar);
             factura.setFitWidth(20);
             factura.setFitHeight(20);
-        } catch (FileNotFoundException ex) {
-            errorGasto.setText("No se ha podido importar la factura");
-        } catch (Exception e) {
-            System.err.println(e);
         }
     }
 
@@ -553,8 +549,8 @@ public class MainAppController implements Initializable {
             dialog.initOwner(stage);
             Scene dialogScene = new Scene(root);
             dialog.setScene(dialogScene);
-            dialog.setMinWidth(500);
-            dialog.setMinHeight(300);
+            dialog.setMinWidth(640);
+            dialog.setMinHeight(450);
             dialog.show();
             dialog.setOnCloseRequest(closeEvent -> handleDialogClose());
             dialog.setOnHidden(hiddenEvent -> handleDialogClose());

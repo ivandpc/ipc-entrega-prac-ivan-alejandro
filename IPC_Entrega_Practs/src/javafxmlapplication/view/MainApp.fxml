@@ -31,7 +31,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="720.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
    <center>
       <HBox alignment="CENTER">
          <children>
@@ -82,7 +82,7 @@
                               <HBox scaleZ="48.0" spacing="5.0" BorderPane.alignment="CENTER">
                                  <children>
                                     <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="modificarGastoButton" mnemonicParsing="false" onAction="#modificarGasto" text="Modificar Gasto" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="modificarGastoButton" mnemonicParsing="false" onAction="#modificarGasto" text="Detalles" HBox.hgrow="ALWAYS" />
                                     <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" HBox.hgrow="ALWAYS" />
                                     <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#imprimir" text="Imprimir" HBox.hgrow="ALWAYS" />
                                  </children>
@@ -128,7 +128,7 @@
                               <TextField fx:id="coste" onAction="#nextCoste" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <TextField fx:id="unidadesText" onAction="#nextUnidades" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <DatePicker fx:id="fechaGasto" onAction="#nextFecha" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre:" />
+                              <Label alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="77.0" text="Nombre:" />
                               <Label alignment="CENTER_RIGHT" text="Descripcion:" GridPane.rowIndex="1" />
                               <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
                               <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />

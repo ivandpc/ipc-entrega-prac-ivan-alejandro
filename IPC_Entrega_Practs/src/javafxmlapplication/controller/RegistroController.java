@@ -84,7 +84,7 @@ public class RegistroController implements Initializable {
             error.setText("Debes introducir un usuario valido");
         } else if (password.getText().length() < 6) {
             error.setText("La contraseña debe tener más de 6 caracteres");
-        }else if(password1.getText() != password.getText()){
+        }else if(!password1.getText().equals(password.getText())){
             error.setText("Las contraseñas no coinciden");
         }
         else {

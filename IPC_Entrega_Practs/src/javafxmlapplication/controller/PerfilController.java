@@ -118,8 +118,8 @@ public class PerfilController implements Initializable {
                 user.setEmail(email.getText());
             }
 
-            if (!password.getText().isEmpty() && password.getText().equals(password1.getText())) {
-                user.setPassword(password.getText());
+            if (password.getText().equals(password1.getText())) {
+                if (!password.getText().isEmpty()) user.setPassword(password.getText());
 
                 Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -170,12 +170,11 @@ public class MainAppController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            //Inicializacion de la tabla principal
             inicializarTabla(Acount.getInstance().getUserCharges());
         } catch (AcountDAOException | IOException ex) {
             System.err.println("Error al cargar la tabla: " + ex);
         }
-        //Inicializa el panel de añadir gasto
+        
         topText.setText("Bienvendido, " + acount.getLoggedUser().getName());
 
         inicializarGastoPanel();
@@ -228,6 +227,7 @@ public class MainAppController implements Initializable {
 
     public void inicializarTabla(List<Charge> s) {
         try {
+            modoGasto = "total";
             acount = Acount.getInstance();
             user = Acount.getInstance().getLoggedUser();
 
@@ -288,7 +288,7 @@ public class MainAppController implements Initializable {
                 series1.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue()));
             }
 
-            gastoMensual.setTitle("Gasto mensual: " + totalMonthlyExpense + "€");
+            gastoMensual.setTitle("Gasto " + modoGasto + ": " + totalMonthlyExpense + "€");
 
             if (!buscarText.isFocused()) {
                 gastoMensual.getData().clear();
@@ -456,22 +456,27 @@ public class MainAppController implements Initializable {
     }
 
     @FXML
-    private void eliminargasto(ActionEvent event) throws AcountDAOException, IOException {
-        if (tabla.getSelectionModel().isEmpty()) {
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Debes seleccionar un elemento de la tabla.");
-            alert.showAndWait();
-            return;
+    private void eliminargasto(ActionEvent event) {
+        try {
+            if (tabla.getSelectionModel().isEmpty()) {
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Debes seleccionar un elemento de la tabla.");
+                alert.showAndWait();
+                return;
+            }
+            
+            TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
+            int row = pos.getRow();
+            Charge item = tabla.getItems().get(row);
+            
+            acount.removeCharge(item);
+            
+            inicializarTabla(Acount.getInstance().getUserCharges());
+        } catch (AcountDAOException | IOException ex) {
+            System.err.println(ex);
         }
-
-        TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
-        int row = pos.getRow();
-        Charge item = tabla.getItems().get(row);
-
-        acount.removeCharge(item);
-        inicializarTabla(Acount.getInstance().getUserCharges());
     }
 
     @FXML
@@ -510,7 +515,7 @@ public class MainAppController implements Initializable {
             ContextMenu cm = new ContextMenu();
             MenuItem mi1 = new MenuItem("Editar");
             cm.getItems().add(mi1);
-            MenuItem mi2 = new MenuItem("Imprimir");
+            MenuItem mi2 = new MenuItem("Eliminar");
             cm.getItems().add(mi2);
             cm.show(tabla, event.getScreenX(), event.getScreenY());
             mi1.setOnAction(new EventHandler<ActionEvent>() {
@@ -522,7 +527,7 @@ public class MainAppController implements Initializable {
             mi2.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent e) {
-                    imprimir(e);
+                    eliminargasto(e);
                 }
             });
 
@@ -624,6 +629,7 @@ public class MainAppController implements Initializable {
 
                 document.add(new Paragraph("\n"));
                 document.add(new Paragraph("Gasto " + modoGasto + ": " + totalMonthlyExpense + "€"));
+                System.out.println(modoGasto);
 
                 document.close();
             } catch (Exception ex) {
@@ -643,8 +649,8 @@ public class MainAppController implements Initializable {
                     s.add(c);
                 }
             }
-            inicializarTabla(s);
             modoGasto = "mensual";
+            inicializarTabla(s);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         }
@@ -666,8 +672,8 @@ public class MainAppController implements Initializable {
                     s.add(c);
                 }
             }
-            inicializarTabla(s);
             modoGasto = "trimestral";
+            inicializarTabla(s);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         }
@@ -683,8 +689,8 @@ public class MainAppController implements Initializable {
                     s.add(c);
                 }
             }
-            inicializarTabla(s);
             modoGasto = "anual";
+            inicializarTabla(s);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         }
@@ -694,8 +700,8 @@ public class MainAppController implements Initializable {
     private void gastoTotal(ActionEvent event) {
         try {
             List<Charge> charges = acount.getUserCharges();
-            inicializarTabla(charges);
             modoGasto = "total";
+            inicializarTabla(charges);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
         }

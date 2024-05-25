@@ -31,7 +31,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
    <center>
       <HBox alignment="CENTER">
          <children>
@@ -60,7 +60,7 @@
                <children>
                   <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <center>
-                        <TableView fx:id="tabla" onContextMenuRequested="#contextmenu" style="-fx-background-color: #3B4252;" tableMenuButtonVisible="true" BorderPane.alignment="CENTER">
+                        <TableView fx:id="tabla" onContextMenuRequested="#contextmenu" style="-fx-background-color: #3B4252;" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="nombre" maxWidth="1.7976931348623157E308" minWidth="300.0" prefWidth="400.0" text="Nombre" />
                               <TableColumn fx:id="categoria" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Categoria" />
@@ -91,7 +91,7 @@
                            <right>
                               <HBox BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField fx:id="buscarText" onKeyPressed="#buscar" HBox.hgrow="ALWAYS" />
+                                    <TextField fx:id="buscarText" onKeyPressed="#buscar" promptText="Buscar" HBox.hgrow="ALWAYS" />
                                     <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
@@ -99,7 +99,7 @@
                         </BorderPane>
                      </top>
                   </BorderPane>
-                  <StackPane fx:id="nuevoGastoPanel" layoutX="2.0" layoutY="35.0" onMousePressed="#nuevoGastoPanelClicked" prefHeight="357.0" prefWidth="408.0" styleClass="stackPane" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="36.0">
+                  <StackPane fx:id="nuevoGastoPanel" layoutX="2.0" layoutY="35.0" onMousePressed="#nuevoGastoPanelClicked" prefHeight="357.0" prefWidth="408.0" styleClass="stackPane" visible="false" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="36.0">
                      <children>
                         <GridPane hgap="5.0" vgap="5.0">
                            <columnConstraints>
@@ -154,7 +154,7 @@
                         </GridPane>
                      </children>
                   </StackPane>
-                  <StackPane fx:id="añadirCategoriaPanel" layoutX="272.0" layoutY="166.0" styleClass="stackPane">
+                  <StackPane fx:id="añadirCategoriaPanel" layoutX="272.0" layoutY="166.0" styleClass="stackPane" visible="false">
                      <children>
                         <GridPane hgap="5.0" vgap="5.0">
                            <columnConstraints>
@@ -184,7 +184,7 @@
                         </GridPane>
                      </children>
                   </StackPane>
-                  <StackPane fx:id="filtroPanel" layoutX="558.0" layoutY="36.0" prefHeight="142.0" prefWidth="180.0" styleClass="stackPane" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0">
+                  <StackPane fx:id="filtroPanel" layoutX="558.0" layoutY="36.0" prefHeight="142.0" prefWidth="180.0" styleClass="stackPane" visible="false" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0">
                      <children>
                         <VBox alignment="CENTER" spacing="5.0">
                            <children>

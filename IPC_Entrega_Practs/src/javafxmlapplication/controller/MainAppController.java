@@ -78,6 +78,7 @@ import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
 import javax.security.auth.login.AccountException;
+
 /**
  * FXML Controller class
  *
@@ -178,7 +179,7 @@ public class MainAppController implements Initializable {
         topText.setText("Bienvendido, " + acount.getLoggedUser().getName());
 
         inicializarGastoPanel();
-        
+
         eliminargastobutton.disableProperty().bind(Bindings.equal(-1, tabla.getSelectionModel().selectedIndexProperty()));
         modificarGastoButton.disableProperty().bind(Bindings.equal(-1, tabla.getSelectionModel().selectedIndexProperty()));
 
@@ -224,7 +225,7 @@ public class MainAppController implements Initializable {
     }
     XYChart.Series series1;
     double totalMonthlyExpense = 0;
-    
+
     public void inicializarTabla(List<Charge> s) {
         try {
             acount = Acount.getInstance();
@@ -265,14 +266,21 @@ public class MainAppController implements Initializable {
             Map<Month, Double> monthlyExpenses = new HashMap<>();
             totalMonthlyExpense = 0;
 
+            Map<String, Double> categoryExpenses = new HashMap<>();
+
             for (Charge charge : charges) {
                 double cost = charge.getCost();
                 Month month = charge.getDate().getMonth();
                 monthlyExpenses.put(month, monthlyExpenses.getOrDefault(month, 0.0) + cost);
-                //if (month.equals(LocalDate.now().getMonth())) {
-                    totalMonthlyExpense += cost;
-                //}
-                datos.add(new PieChart.Data(charge.getCategory().getName(), cost));
+
+                totalMonthlyExpense += cost;
+
+                String categoryName = charge.getCategory().getName();
+                categoryExpenses.put(categoryName, categoryExpenses.getOrDefault(categoryName, 0.0) + cost);
+            }
+
+            for (Map.Entry<String, Double> entry : categoryExpenses.entrySet()) {
+                datos.add(new PieChart.Data(entry.getKey(), entry.getValue()));
             }
 
             series1.getData().clear();
@@ -305,11 +313,9 @@ public class MainAppController implements Initializable {
     private void logout(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/login.fxml"));
         Parent root = loader.load();
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
+        Scene scene = new Scene(root, errorGasto.getScene().getWidth(), errorGasto.getScene().getHeight());
+        Stage stage = (Stage) tabla.getScene().getWindow();
         stage.setScene(scene);
-        stage.show();
-        tabla.getScene().getWindow().hide();
     }
 
     @FXML
@@ -456,7 +462,6 @@ public class MainAppController implements Initializable {
     @FXML
     private void eliminargasto(ActionEvent event) throws AcountDAOException, IOException {
         if (tabla.getSelectionModel().isEmpty()) {
-            // If nothing is selected in the tabla, show an error message
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -525,7 +530,6 @@ public class MainAppController implements Initializable {
                 }
             });
 
-            // Adding event filter to hide the context menu on mouse click outside of it
             tabla.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent event1) -> {
                 if (cm.isShowing()) {
                     cm.hide();
@@ -621,10 +625,10 @@ public class MainAppController implements Initializable {
                 }
 
                 document.add(table);
-                
+
                 document.add(new Paragraph("\n"));
-                document.add(new Paragraph("Gasto " + modoGasto +  ": " + totalMonthlyExpense + "€"));
-                
+                document.add(new Paragraph("Gasto " + modoGasto + ": " + totalMonthlyExpense + "€"));
+
                 document.close();
             } catch (Exception ex) {
                 System.err.println(ex);
@@ -632,13 +636,14 @@ public class MainAppController implements Initializable {
         }
     }
     String modoGasto = "total";
+
     @FXML
     private void gastoMensual(ActionEvent event) {
         try {
             List<Charge> charges = acount.getUserCharges();
             List<Charge> s = new ArrayList();
             for (Charge c : charges) {
-                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(),LocalDate.now().getMonth().getValue(),1))) {
+                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue(), 1))) {
                     s.add(c);
                 }
             }
@@ -655,8 +660,11 @@ public class MainAppController implements Initializable {
             List<Charge> charges = acount.getUserCharges();
             List<Charge> s = new ArrayList();
             int mes = LocalDate.now().getMonth().getValue();
-            if (mes < 3) mes = 1;
-            else mes += -3;
+            if (mes < 3) {
+                mes = 1;
+            } else {
+                mes += -3;
+            }
             for (Charge c : charges) {
                 if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(), mes, 1))) {
                     s.add(c);
@@ -675,7 +683,7 @@ public class MainAppController implements Initializable {
             List<Charge> charges = acount.getUserCharges();
             List<Charge> s = new ArrayList();
             for (Charge c : charges) {
-                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(),1,1))) {
+                if (c.getDate().isAfter(LocalDate.of(LocalDate.now().getYear(), 1, 1))) {
                     s.add(c);
                 }
             }

@@ -31,7 +31,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="720.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
+<BorderPane prefHeight="720.0" prefWidth="1090.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.MainAppController">
    <center>
       <HBox alignment="CENTER">
          <children>
@@ -39,7 +39,7 @@
               <items>
                   <VBox alignment="TOP_CENTER">
                      <children>
-                        <StackedBarChart fx:id="gastoMensual" animated="false" horizontalGridLinesVisible="false" legendVisible="false">
+                        <StackedBarChart fx:id="gastoMensual" animated="false" horizontalGridLinesVisible="false" legendVisible="false" VBox.vgrow="ALWAYS">
                           <xAxis>
                             <CategoryAxis animated="false" side="BOTTOM" fx:id="xAxis" />
                           </xAxis>
@@ -51,7 +51,7 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <PieChart fx:id="piechart" animated="false" />
+                        <PieChart fx:id="piechart" animated="false" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
               </items>
@@ -79,20 +79,20 @@
                               <Insets />
                            </BorderPane.margin>
                            <center>
-                              <HBox scaleZ="48.0" spacing="5.0">
+                              <HBox scaleZ="48.0" spacing="5.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" />
-                                    <Button fx:id="modificarGastoButton" mnemonicParsing="false" onAction="#modificarGasto" text="Modificar Gasto" />
-                                    <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" />
-                                    <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#imprimir" text="Imprimir" />
+                                    <Button mnemonicParsing="false" onAction="#nuevoGasto" text="Nuevo Gasto" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="modificarGastoButton" mnemonicParsing="false" onAction="#modificarGasto" text="Modificar Gasto" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="eliminargastobutton" mnemonicParsing="false" onAction="#eliminargasto" text="Eliminar Gasto" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="imprimirButton" mnemonicParsing="false" onAction="#imprimir" text="Imprimir" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </center>
                            <right>
                               <HBox BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField fx:id="buscarText" onKeyPressed="#buscar" />
-                                    <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" />
+                                    <TextField fx:id="buscarText" onKeyPressed="#buscar" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="filtroButton" mnemonicParsing="false" onAction="#filtro" prefHeight="26.0" prefWidth="91.0" text="Filtro" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </right>
@@ -188,9 +188,9 @@
                      <children>
                         <VBox alignment="CENTER" spacing="5.0">
                            <children>
-                              <Button mnemonicParsing="false" onAction="#gastoMensual" prefHeight="36.0" prefWidth="118.0" text="Gasto mensual" />
-                              <Button mnemonicParsing="false" onAction="#gastoTrimestral" prefHeight="36.0" prefWidth="118.0" text="Gasto trimestal" />
-                              <Button mnemonicParsing="false" onAction="#gastoAnual" prefHeight="36.0" prefWidth="118.0" text="Gasto anual" />
+                              <Button mnemonicParsing="false" onAction="#gastoMensual" prefHeight="36.0" prefWidth="118.0" text="Gasto mensual" VBox.vgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" onAction="#gastoTrimestral" prefHeight="36.0" prefWidth="118.0" text="Gasto trimestal" VBox.vgrow="ALWAYS" />
+                              <Button mnemonicParsing="false" onAction="#gastoAnual" prefHeight="36.0" prefWidth="118.0" text="Gasto anual" VBox.vgrow="ALWAYS" />
                               <Button mnemonicParsing="false" onAction="#gastoTotal" prefHeight="36.0" prefWidth="118.0" text="Gasto total" />
                            </children>
                            <StackPane.margin>

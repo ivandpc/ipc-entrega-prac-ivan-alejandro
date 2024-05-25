@@ -61,10 +61,12 @@ public class RegistroController implements Initializable {
     private GridPane fondo;
     @FXML
     private Button cancelarBotton;
-    
+    @FXML
+    private PasswordField password1;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
     private Stage stage;
     private Scene scene;
@@ -78,17 +80,32 @@ public class RegistroController implements Initializable {
             error.setText("Debes introducir tus apellidos");
         } else if (email.getText().isBlank()) {
             error.setText("Debes introducir tu email");
-        } else if (usuario.getText().isBlank() || (usuario.getText().indexOf(' ') != -1)) {
+        } else if (usuario.getText().isBlank() || usuario.getText().contains(" ")) {
             error.setText("Debes introducir un usuario valido");
         } else if (password.getText().length() < 6) {
-            error.setText("La contraseña debe tener más de 6 carácteres");
-        } else if (nombre.getText() != null || apellidos.getText() != null || email.getText() != null || usuario.getText() != null || password.getText() != null || LocalDate.now() != null) {
+            error.setText("La contraseña debe tener más de 6 caracteres");
+        }else if(password1.getText() != password.getText()){
+            error.setText("Las contraseñas no coinciden");
+        }
+        else {
             try {
-                if (Acount.getInstance().registerUser(nombre.getText(), apellidos.getText(), email.getText(), usuario.getText(), password.getText(), avatar, LocalDate.now())) {
+                boolean isRegistered = Acount.getInstance().registerUser(
+                        nombre.getText(),
+                        apellidos.getText(),
+                        email.getText(),
+                        usuario.getText(),
+                        password.getText(),
+                        avatar,
+                        LocalDate.now()
+                );
+
+                if (isRegistered) {
                     Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
-                    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                    scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
+                    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                    Scene scene = new Scene(root, ((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
                     stage.setScene(scene);
+                } else {
+                    error.setText("Error en el registro, inténtalo de nuevo");
                 }
             } catch (AcountDAOException e) {
                 error.setText("El usuario ya existe");
@@ -96,17 +113,24 @@ public class RegistroController implements Initializable {
             }
         }
     }
+
     private File file;
     private Image avatar;
 
     @FXML
-    private void singleFileChooser(ActionEvent event) throws FileNotFoundException {
+
+    public void singleFileChooser(ActionEvent event) throws FileNotFoundException {
         FileChooser fc = new FileChooser();
-        file = fc.showOpenDialog(null);
-        String url = file.getAbsolutePath();
-        avatar = new Image(new FileInputStream(url));
-        perfil.setImage(avatar);
-        
+
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
+
+        File file = fc.showOpenDialog(null);
+
+        if (file != null) {
+            String url = file.getAbsolutePath();
+            Image avatar = new Image(new FileInputStream(url));
+            perfil.setImage(avatar);
+        }
     }
 
     @FXML
@@ -115,36 +139,46 @@ public class RegistroController implements Initializable {
     }
 
     @FXML
-    private void cancelar(ActionEvent event) throws IOException{
+    private void cancelar(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
+        scene = new Scene(root, ((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
         stage.setScene(scene);
     }
 
     @FXML
     private void nextNombre(ActionEvent event) {
-        if (!nombre.getText().isBlank()) apellidos.requestFocus();
+        if (!nombre.getText().isBlank()) {
+            apellidos.requestFocus();
+        }
     }
 
     @FXML
     private void nextApellidos(ActionEvent event) {
-        if (!apellidos.getText().isBlank()) email.requestFocus();
+        if (!apellidos.getText().isBlank()) {
+            email.requestFocus();
+        }
     }
 
     @FXML
     private void nextEmail(ActionEvent event) {
-        if (!email.getText().isBlank()) usuario.requestFocus();
+        if (!email.getText().isBlank()) {
+            usuario.requestFocus();
+        }
     }
 
     @FXML
     private void nextUser(ActionEvent event) {
-        if (!usuario.getText().isBlank()) password.requestFocus();
+        if (!usuario.getText().isBlank()) {
+            password.requestFocus();
+        }
     }
 
     @FXML
     private void nextPassword(ActionEvent event) throws IOException {
-        if (!usuario.getText().isBlank()) aceptarRegistro(event);
+        if (!usuario.getText().isBlank()) {
+            aceptarRegistro(event);
+        }
     }
 
 }

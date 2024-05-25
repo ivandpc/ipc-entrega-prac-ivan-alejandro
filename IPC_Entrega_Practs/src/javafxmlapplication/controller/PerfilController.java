@@ -77,6 +77,8 @@ public class PerfilController implements Initializable {
     private ImageView toolbarImage;
     @FXML
     private Label username;
+    @FXML
+    private PasswordField password1;
 
     /**
      * Initializes the controller class.
@@ -103,42 +105,55 @@ public class PerfilController implements Initializable {
     @FXML
     private void confirmar(ActionEvent event) throws IOException {
         if (!password.getText().isEmpty() && password.getText().length() < 6) {
-            error.setText("La contraseña debe tener más de 6 carácteres");
+            error.setText("La contraseña debe tener más de 6 caracteres");
         } else {
-                user.setImage(perfil.getImage());
-                if (!nombre.getText().isEmpty()) user.setName(nombre.getText());
-                if (!apellidos.getText().isEmpty()) user.setSurname(apellidos.getText());
-                if (!email.getText().isEmpty()) user.setEmail(email.getText());
-                if (!password.getText().isEmpty()) {
-                    user.setPassword(password.getText());
-                }
+            user.setImage(perfil.getImage());
+            if (!nombre.getText().isEmpty()) {
+                user.setName(nombre.getText());
+            }
+            if (!apellidos.getText().isEmpty()) {
+                user.setSurname(apellidos.getText());
+            }
+            if (!email.getText().isEmpty()) {
+                user.setEmail(email.getText());
+            }
 
-            Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
-            stage.setScene(scene);
-            stage.setResizable(true);
+            if (!password.getText().isEmpty() && password.getText().equals(password1.getText())) {
+                user.setPassword(password.getText());
+
+                Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                Scene scene = new Scene(root, ((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
+                stage.setScene(scene);
+                stage.setResizable(true);
+            } else {
+                error.setText("Las contraseñas no coinciden");
+            }
         }
-
     }
 
     @FXML
-    private void singleFileChooser(ActionEvent event) throws FileNotFoundException {
+    public void singleFileChooser(ActionEvent event) throws FileNotFoundException {
         FileChooser fc = new FileChooser();
-        f = fc.showOpenDialog(null);
-        String url = f.getAbsolutePath();
-        avatar = new Image(new FileInputStream(url));
-        perfil.setImage(avatar);
 
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
+
+        File file = fc.showOpenDialog(null);
+
+        if (file != null) {
+            String url = file.getAbsolutePath();
+            Image avatar = new Image(new FileInputStream(url));
+            perfil.setImage(avatar);
+        }
     }
 
     @FXML
     private void cancelar(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("../view/MainApp.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root,((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
-            stage.setScene(scene);
-            stage.setResizable(true);
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root, ((Node) event.getSource()).getScene().getWidth(), ((Node) event.getSource()).getScene().getHeight());
+        stage.setScene(scene);
+        stage.setResizable(true);
     }
 
     @FXML
@@ -169,9 +184,6 @@ public class PerfilController implements Initializable {
 
     @FXML
     private void nextPassword(ActionEvent event) throws IOException {
-        if (!usuario.getText().isBlank()) {
-            confirmar(event);
-        }
     }
 
     @FXML

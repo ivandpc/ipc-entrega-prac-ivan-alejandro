@@ -12,6 +12,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -76,10 +78,25 @@ public class EditarGastoController implements Initializable {
     @FXML
     private Label error;
     @FXML
-    private Button eliminarCategoria;
-
+    private Button añadirCategoriaButton;
+    @FXML
+    private StackPane añadirCategoriaPanel;
+    @FXML
+    private TextField nombreCategoria;
+    @FXML
+    private TextField descripcionCategoria;
+    @FXML
+    private Button confirmarCategoriaButton;
+    @FXML
+    private Label errorCategoria;
+    Acount acount;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            acount = Acount.getInstance();
+        } catch (AcountDAOException | IOException ex) {
+            System.err.println(ex);
+        }
         coste.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {
                 coste.setText(oldValue);
@@ -90,6 +107,53 @@ public class EditarGastoController implements Initializable {
                 unidadesText.setText(oldValue);
             }
         });
+        nombreText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) nombreText.setText(oldValue);
+        });
+        descripcion.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) descripcion.setText(oldValue);
+        });
+        nombreCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) nombreCategoria.setText(oldValue);
+        });
+        descripcionCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) descripcionCategoria.setText(oldValue);
+        });
+        coste.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {
+                coste.setText(oldValue);
+            }
+            if (newValue.length() > 10) coste.setText(oldValue);
+        });
+        unidadesText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                unidadesText.setText(oldValue);
+            }
+            if (newValue.length() > 10) unidadesText.setText(oldValue);
+        });
+        añadirCategoriaPanel.setVisible(false);
+    }
+    
+    private void inicializarCategorias() {
+        
+        try {
+            List<Category> categories = acount.getUserCategories();
+            categoriaText.setItems(FXCollections.observableArrayList(categories));
+            categoriaText.setConverter(new StringConverter<Category>() {
+                @Override
+                public String toString(Category category) {
+                    return category != null ? category.getName() : "";
+                }
+
+                @Override
+                public Category fromString(String string) {
+                    return null;
+                }
+            });
+        } catch (AcountDAOException e) {
+            error.setText("Error al actualizar la categoria");
+            System.err.println(e);
+        }
     }
 
     public void setValues(Charge charge) throws AcountDAOException, IOException {
@@ -209,19 +273,40 @@ public class EditarGastoController implements Initializable {
         fondo.requestFocus();
     }
 
-    @FXML
-    private void eliminarCategoria(ActionEvent event) throws AcountDAOException, IOException {
-        
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText("Look, a Confirmation Dialog");
-        alert.setContentText("Are you ok with this?");
+    
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            Acount.getInstance().removeCategory(categoriaText.getValue());
+    @FXML
+    private void añadirCategoria(ActionEvent event) {
+        añadirCategoriaPanel.setVisible(!añadirCategoriaPanel.visibleProperty().getValue());
+    }
+
+    @FXML
+    private void nextNombreCategoria(ActionEvent event) {
+        
+    }
+
+    @FXML
+    private void nextDescripcionCategoria(ActionEvent event) {
+        
+    }
+
+    @FXML
+    private void confirmarCategoria(ActionEvent event) {
+        if (nombreCategoria.getText().isBlank()) {
+            errorCategoria.setText("Debes introducir un nombre");
         } else {
-            // ... user chose CANCEL or closed the dialog
+            try {
+                if (!acount.registerCategory(nombreCategoria.getText(), descripcionCategoria.getText())) {
+                    errorCategoria.setText("Error al añadir la categoria");
+                } else {
+                    nombreCategoria.setText("");
+                    descripcionCategoria.setText("");
+                    añadirCategoriaPanel.setVisible(false);
+                    inicializarCategorias();
+                }
+            } catch (AcountDAOException ex) {
+                errorCategoria.setText("La categoria ya existe");
+            }
         }
     }
 }

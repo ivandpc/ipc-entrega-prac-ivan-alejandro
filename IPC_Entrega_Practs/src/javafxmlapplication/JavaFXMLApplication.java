@@ -25,7 +25,7 @@ public class JavaFXMLApplication extends Application {
         Parent root = loader.load();
         //======================================================================
         // 2- creación de la escena con el nodo raiz del grafo de escena
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(root, 1110, 700);
         //======================================================================
         // 3- asiganación de la escena al Stage que recibe el metodo 
         //     - configuracion del stage

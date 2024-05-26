@@ -141,11 +141,11 @@ public class RegistroController implements Initializable {
 
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif", "*.bmp"));
 
-        File file = fc.showOpenDialog(null);
+        file = fc.showOpenDialog(null);
 
         if (file != null) {
             String url = file.getAbsolutePath();
-            Image avatar = new Image(new FileInputStream(url));
+            avatar = new Image(new FileInputStream(url));
             perfil.setImage(avatar);
         }
     }

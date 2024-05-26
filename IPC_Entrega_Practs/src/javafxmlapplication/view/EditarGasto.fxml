@@ -8,78 +8,116 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 
 <GridPane fx:id="fondo" onMousePressed="#fondoClicked" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.EditarGastoController">
    <columnConstraints>
+      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
       <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="600.0" minWidth="400.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
    <rowConstraints>
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
       <RowConstraints maxHeight="600.0" vgrow="ALWAYS" />
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <GridPane hgap="10.0" vgap="10.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-         <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" minWidth="100.0" />
-            <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-            <RowConstraints vgrow="SOMETIMES" />
-         </rowConstraints>
+      <AnchorPane GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
          <children>
-            <Label alignment="CENTER_RIGHT" text="Nombre:" />
-            <TextField fx:id="nombreText" onAction="#nextNombre" GridPane.columnIndex="1" />
-            
-                        <Label alignment="CENTER_RIGHT" text="Descripcion:" GridPane.rowIndex="1" />
-            <TextField fx:id="descripcion" onAction="#nextDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            
-                        <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
-            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <GridPane hgap="10.0" vgap="10.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="RIGHT" minWidth="100.0" />
+                  <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+                  <ColumnConstraints maxWidth="223.0" minWidth="165.0" prefWidth="172.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+                  <RowConstraints vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <ChoiceBox fx:id="categoriaText" maxWidth="1.7976931348623157E308" prefHeight="46.0" prefWidth="137.0" />
-                  <Button fx:id="eliminarCategoria" mnemonicParsing="false" onAction="#eliminarCategoria" prefHeight="46.0" prefWidth="74.0" text="Eliminar" HBox.hgrow="ALWAYS" />
+                  <Label alignment="CENTER_RIGHT" text="Nombre:" />
+                  <TextField fx:id="nombreText" onAction="#nextNombre" GridPane.columnIndex="1" />
+                  
+                                          <Label alignment="CENTER_RIGHT" text="Descripcion:" GridPane.rowIndex="1" />
+                  <TextField fx:id="descripcion" onAction="#nextDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  
+                                          <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
+                  <HBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <ChoiceBox fx:id="categoriaText" maxWidth="1.7976931348623157E308" prefHeight="46.0" prefWidth="137.0" />
+                        <Button fx:id="añadirCategoriaButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#añadirCategoria" text="Añadir categoria" />
+                     </children>
+                  </HBox>
+                  
+                                          <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
+                  <TextField fx:id="coste" onAction="#nextCoste" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  
+                                          <Label alignment="CENTER_RIGHT" text="Unidades:" GridPane.rowIndex="4" />
+                  <TextField fx:id="unidadesText" onAction="#nextUnidades" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  
+                                          <Label alignment="CENTER_RIGHT" text="Fecha:" GridPane.rowIndex="5" />
+                  <DatePicker fx:id="fechaGasto" onAction="#nextFecha" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  
+                                          <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
+                  <Button fx:id="facturaButton" mnemonicParsing="false" onAction="#añadirFactura" text="Cambiar" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  
+                                          <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                     <children>
+                        <Button fx:id="confirmarButton" mnemonicParsing="false" onAction="#confirmar" prefHeight="36.0" prefWidth="100.0" text="Confirmar" />
+                        <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cancelar" prefHeight="36.0" prefWidth="102.0" text="Cancelar" />
+                        <Label fx:id="error" styleClass="errorText" />
+                     </children>
+                  </HBox>
+                  
+                                          <ImageView fx:id="factura" fitHeight="374.0" fitWidth="228.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowSpan="8" />
                </children>
-            </HBox>
-            
-                        <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
-            <TextField fx:id="coste" onAction="#nextCoste" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            
-                        <Label alignment="CENTER_RIGHT" text="Unidades:" GridPane.rowIndex="4" />
-            <TextField fx:id="unidadesText" onAction="#nextUnidades" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            
-                        <Label alignment="CENTER_RIGHT" text="Fecha:" GridPane.rowIndex="5" />
-            <DatePicker fx:id="fechaGasto" onAction="#nextFecha" prefWidth="222.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            
-                        <Label alignment="CENTER_RIGHT" text="Factura:" GridPane.rowIndex="6" />
-            <Button fx:id="facturaButton" mnemonicParsing="false" onAction="#añadirFactura" text="Cambiar" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            
-                        <HBox alignment="CENTER_LEFT" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </GridPane>
+            <StackPane fx:id="añadirCategoriaPanel" layoutX="272.0" layoutY="158.0" styleClass="stackPane" visible="false">
                <children>
-                  <Button fx:id="confirmarButton" mnemonicParsing="false" onAction="#confirmar" prefHeight="36.0" prefWidth="100.0" text="Confirmar" />
-                  <Button fx:id="cancelarButton" mnemonicParsing="false" onAction="#cancelar" prefHeight="36.0" prefWidth="102.0" text="Cancelar" />
-                  <Label fx:id="error" styleClass="errorText" />
+                  <GridPane hgap="5.0" vgap="5.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="57.0" text="Nombre" />
+                        <TextField fx:id="nombreCategoria" onAction="#nextNombreCategoria" GridPane.columnIndex="1" />
+                        <Label alignment="CENTER_RIGHT" text="Descripcion" GridPane.rowIndex="1" />
+                        <TextField fx:id="descripcionCategoria" onAction="#nextDescripcionCategoria" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Button fx:id="confirmarCategoriaButton" mnemonicParsing="false" onAction="#confirmarCategoria" text="Confirmar" />
+                              <Label fx:id="errorCategoria" styleClass="errorText" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </StackPane.margin>
+                  </GridPane>
                </children>
-            </HBox>
-            
-                        <ImageView fx:id="factura" fitHeight="374.0" fitWidth="228.0" pickOnBounds="true" GridPane.columnIndex="2" GridPane.rowSpan="8" />
+            </StackPane>
          </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </GridPane>
+      </AnchorPane>
    </children>
    <stylesheets>
       <URL value="@../../style/nord-dark.css" />

@@ -75,9 +75,11 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javax.security.auth.login.AccountException;
 
@@ -168,6 +170,8 @@ public class MainAppController implements Initializable {
     private CategoryAxis xAxis;
     @FXML
     private Button imprimirButton;
+    @FXML
+    private Button eliminarCategoria;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -340,6 +344,7 @@ public class MainAppController implements Initializable {
         nuevoGastoPanel.setVisible(!nuevoGastoPanel.visibleProperty().getValue());
         añadirCategoriaPanel.setVisible(false);
         filtroPanel.setVisible(false);
+        inicializarCategorias();
     }
 
     @FXML
@@ -568,8 +573,8 @@ public class MainAppController implements Initializable {
             childController.setValues(item);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setUserData(item);
-            stage.setTitle("Editar gasto");
-            stage.getIcons().add(new Image("/icons/icono.png"));
+            dialog.setTitle("Editar gasto");
+            dialog.getIcons().add(new Image("/icons/icono.png"));
             dialog.initOwner(stage);
             Scene dialogScene = new Scene(root);
             dialog.setScene(dialogScene);
@@ -723,6 +728,22 @@ public class MainAppController implements Initializable {
             inicializarTabla(charges);
         } catch (AcountDAOException ex) {
             System.err.println(ex);
+        }
+    }
+
+    @FXML
+    private void eliminarCategoria(ActionEvent event) throws AcountDAOException, IOException {
+        
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Eliminar categoría");
+        alert.setHeaderText("Estás seguro de que quieres eliminar esta categoría?");
+        alert.setContentText("Se borrarán todos los gastos con esta categoría");
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("../../style/nord-dark.css").toExternalForm());
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Acount.getInstance().removeCategory(tabla.getSelectionModel().getSelectedItem().getCategory());
+            inicializarTabla(acount.getUserCharges());
         }
     }
 }

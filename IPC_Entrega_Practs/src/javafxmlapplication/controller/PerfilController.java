@@ -49,7 +49,6 @@ public class PerfilController implements Initializable {
     private TextField apellidos;
     @FXML
     private TextField email;
-    private TextField usuario;
     @FXML
     private PasswordField password;
     @FXML
@@ -110,9 +109,6 @@ public class PerfilController implements Initializable {
         email.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 10) email.setText(oldValue);
         });
-        usuario.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) usuario.setText(oldValue);
-        });
         password.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 10) password.setText(oldValue);
         });
@@ -127,13 +123,13 @@ public class PerfilController implements Initializable {
             error.setText("La contraseña debe tener más de 6 caracteres");
         } else {
             user.setImage(perfil.getImage());
-            if (!nombre.getText().isEmpty()) {
+            if (!nombre.getText().isBlank()) {
                 user.setName(nombre.getText());
             }
-            if (!apellidos.getText().isEmpty()) {
+            if (!apellidos.getText().isBlank()) {
                 user.setSurname(apellidos.getText());
             }
-            if (!email.getText().isEmpty()) {
+            if (!email.getText().isBlank()) {
                 user.setEmail(email.getText());
             }
 

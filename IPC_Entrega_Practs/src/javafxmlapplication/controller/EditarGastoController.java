@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -17,7 +18,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -71,6 +75,8 @@ public class EditarGastoController implements Initializable {
     private GridPane fondo;
     @FXML
     private Label error;
+    @FXML
+    private Button eliminarCategoria;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -87,7 +93,7 @@ public class EditarGastoController implements Initializable {
     }
 
     public void setValues(Charge charge) throws AcountDAOException, IOException {
-        
+
         this.charge = charge;
         nombreText.setText(charge.getName());
         descripcion.setText(charge.getDescription());
@@ -115,7 +121,6 @@ public class EditarGastoController implements Initializable {
         }
     }
 
-
     @FXML
     private void nextNombre(ActionEvent event) {
         descripcion.requestFocus();
@@ -140,9 +145,10 @@ public class EditarGastoController implements Initializable {
     private void nextFecha(ActionEvent event) {
         facturaButton.requestFocus();
     }
-    
+
     private File file;
     private Image avatar;
+
     @FXML
     private void añadirFactura(ActionEvent event) {
         FileChooser fc = new FileChooser();
@@ -170,16 +176,24 @@ public class EditarGastoController implements Initializable {
 
     @FXML
     private void confirmar(ActionEvent event) throws AcountDAOException, IOException, InstantiationException, IllegalAccessException {
-        
-        if (!nombreText.getText().isEmpty()) charge.setName(nombreText.getText());
-        if (!descripcion.getText().isEmpty()) charge.setDescription(descripcion.getText());
+
+        if (!nombreText.getText().isEmpty()) {
+            charge.setName(nombreText.getText());
+        }
+        if (!descripcion.getText().isEmpty()) {
+            charge.setDescription(descripcion.getText());
+        }
         charge.setCategory(categoriaText.getValue());
         if (!coste.getText().isEmpty()) {
             charge.setCost(Double.parseDouble(coste.getText()));
         }
-        if (!unidadesText.getText().isEmpty()) charge.setUnits(Integer.parseInt(unidadesText.getText()));
+        if (!unidadesText.getText().isEmpty()) {
+            charge.setUnits(Integer.parseInt(unidadesText.getText()));
+        }
         charge.setDate(fechaGasto.getValue());
-        if (factura.getImage() != null) charge.setImageScan(factura.getImage());
+        if (factura.getImage() != null) {
+            charge.setImageScan(factura.getImage());
+        }
         Stage stage = (Stage) confirmarButton.getScene().getWindow();
         stage.close();
     }
@@ -193,5 +207,21 @@ public class EditarGastoController implements Initializable {
     @FXML
     private void fondoClicked(MouseEvent event) {
         fondo.requestFocus();
+    }
+
+    @FXML
+    private void eliminarCategoria(ActionEvent event) throws AcountDAOException, IOException {
+        
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Look, a Confirmation Dialog");
+        alert.setContentText("Are you ok with this?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Acount.getInstance().removeCategory(categoriaText.getValue());
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
     }
 }

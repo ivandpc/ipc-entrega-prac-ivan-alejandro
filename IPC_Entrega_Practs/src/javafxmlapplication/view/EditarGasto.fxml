@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<GridPane fx:id="fondo" onMousePressed="#fondoClicked" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.EditarGastoController">
+<GridPane fx:id="fondo" onMousePressed="#fondoClicked" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafxmlapplication.controller.EditarGastoController">
    <columnConstraints>
       <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="600.0" minWidth="400.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
@@ -23,7 +23,7 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <GridPane hgap="10.0" vgap="10.0">
+      <GridPane hgap="10.0" vgap="10.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <columnConstraints>
             <ColumnConstraints halignment="RIGHT" minWidth="100.0" />
             <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
@@ -47,7 +47,12 @@
             <TextField fx:id="descripcion" onAction="#nextDescripcion" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             
                         <Label alignment="CENTER_RIGHT" text="Categoria:" GridPane.rowIndex="2" />
-            <ChoiceBox fx:id="categoriaText" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <ChoiceBox fx:id="categoriaText" maxWidth="1.7976931348623157E308" prefHeight="46.0" prefWidth="137.0" />
+                  <Button fx:id="eliminarCategoria" mnemonicParsing="false" onAction="#eliminarCategoria" prefHeight="46.0" prefWidth="74.0" text="Eliminar" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
             
                         <Label alignment="CENTER_RIGHT" text="Coste:" GridPane.rowIndex="3" />
             <TextField fx:id="coste" onAction="#nextCoste" GridPane.columnIndex="1" GridPane.rowIndex="3" />

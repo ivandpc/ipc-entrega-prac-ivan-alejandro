@@ -66,7 +66,24 @@ public class RegistroController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        nombre.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) nombre.setText(oldValue);
+        });
+        apellidos.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) apellidos.setText(oldValue);
+        });
+        email.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) email.setText(oldValue);
+        });
+        usuario.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) usuario.setText(oldValue);
+        });
+        password.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) password.setText(oldValue);
+        });
+        password1.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 10) password1.setText(oldValue);
+        });
     }
     private Stage stage;
     private Scene scene;

@@ -58,10 +58,10 @@ public class LoginController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         userText.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) userText.setText(oldValue);
+            if (newValue.length() > 25) userText.setText(oldValue);
         });
         passwordText.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) passwordText.setText(oldValue);
+            if (newValue.length() > 25) passwordText.setText(oldValue);
         });
         
     }

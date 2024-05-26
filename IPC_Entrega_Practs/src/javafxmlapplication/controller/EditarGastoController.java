@@ -108,16 +108,16 @@ public class EditarGastoController implements Initializable {
             }
         });
         nombreText.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) nombreText.setText(oldValue);
+            if (newValue.length() > 25) nombreText.setText(oldValue);
         });
         descripcion.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) descripcion.setText(oldValue);
+            if (newValue.length() > 25) descripcion.setText(oldValue);
         });
         nombreCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) nombreCategoria.setText(oldValue);
+            if (newValue.length() > 25) nombreCategoria.setText(oldValue);
         });
         descripcionCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) descripcionCategoria.setText(oldValue);
+            if (newValue.length() > 25) descripcionCategoria.setText(oldValue);
         });
         coste.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {

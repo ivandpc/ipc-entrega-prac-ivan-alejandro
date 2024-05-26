@@ -60,7 +60,7 @@
                <children>
                   <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <center>
-                        <TableView fx:id="tabla" onContextMenuRequested="#contextmenu" style="-fx-background-color: #3B4252;" BorderPane.alignment="CENTER">
+                        <TableView fx:id="tabla" onContextMenuRequested="#contextmenu" onMousePressed="#tablaClicked" style="-fx-background-color: #3B4252;" BorderPane.alignment="CENTER">
                           <columns>
                             <TableColumn fx:id="nombre" maxWidth="1.7976931348623157E308" minWidth="300.0" prefWidth="400.0" text="Nombre" />
                               <TableColumn fx:id="categoria" maxWidth="200.0" minWidth="100.0" prefWidth="100.0" text="Categoria" />

@@ -101,19 +101,19 @@ public class PerfilController implements Initializable {
         email.setPromptText(user.getEmail());
         
         nombre.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) nombre.setText(oldValue);
+            if (newValue.length() > 25) nombre.setText(oldValue);
         });
         apellidos.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) apellidos.setText(oldValue);
+            if (newValue.length() > 25) apellidos.setText(oldValue);
         });
         email.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) email.setText(oldValue);
+            if (newValue.length() > 25) email.setText(oldValue);
         });
         password.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) password.setText(oldValue);
+            if (newValue.length() > 25) password.setText(oldValue);
         });
         password1.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) password1.setText(oldValue);
+            if (newValue.length() > 25) password1.setText(oldValue);
         });
     }
 

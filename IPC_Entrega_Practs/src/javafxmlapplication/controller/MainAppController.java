@@ -187,35 +187,35 @@ public class MainAppController implements Initializable {
 
         eliminargastobutton.disableProperty().bind(Bindings.equal(-1, tabla.getSelectionModel().selectedIndexProperty()));
         modificarGastoButton.disableProperty().bind(Bindings.equal(-1, tabla.getSelectionModel().selectedIndexProperty()));
-
+        eliminarCategoria.disableProperty().bind(Bindings.equal(-1, tabla.getSelectionModel().selectedIndexProperty()));
     }
 
     private void inicializarGastoPanel() {
         inicializarCategorias();
 
         nombreText.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) nombreText.setText(oldValue);
+            if (newValue.length() > 25) nombreText.setText(oldValue);
         });
         descripcion.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) descripcion.setText(oldValue);
+            if (newValue.length() > 25) descripcion.setText(oldValue);
         });
         nombreCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) nombreCategoria.setText(oldValue);
+            if (newValue.length() > 25) nombreCategoria.setText(oldValue);
         });
         descripcionCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 10) descripcionCategoria.setText(oldValue);
+            if (newValue.length() > 25) descripcionCategoria.setText(oldValue);
         });
         coste.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {
                 coste.setText(oldValue);
             }
-            if (newValue.length() > 10) coste.setText(oldValue);
+            if (newValue.length() > 25) coste.setText(oldValue);
         });
         unidadesText.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 unidadesText.setText(oldValue);
             }
-            if (newValue.length() > 10) unidadesText.setText(oldValue);
+            if (newValue.length() > 25) unidadesText.setText(oldValue);
         });
         fechaGasto.setValue(LocalDate.now());
 
@@ -745,5 +745,10 @@ public class MainAppController implements Initializable {
             Acount.getInstance().removeCategory(tabla.getSelectionModel().getSelectedItem().getCategory());
             inicializarTabla(acount.getUserCharges());
         }
+    }
+
+    @FXML
+    private void tablaClicked(MouseEvent event) {
+        nuevoGastoPanel.setVisible(false);
     }
 }

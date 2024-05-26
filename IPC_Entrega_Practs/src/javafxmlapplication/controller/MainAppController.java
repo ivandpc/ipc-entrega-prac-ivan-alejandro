@@ -74,6 +74,8 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;
@@ -225,7 +227,7 @@ public class MainAppController implements Initializable {
     XYChart.Series series1;
     double totalMonthlyExpense = 0;
 
-    public void inicializarTabla(List<Charge> s) {
+    public void inicializarTabla(List<Charge> charges) {
         try {
             modoGasto = "total";
             acount = Acount.getInstance();
@@ -234,43 +236,38 @@ public class MainAppController implements Initializable {
             toolbarImage.setImage(user.getImage());
             toolbarUsername.setText(user.getNickName());
 
-            categoria.setCellFactory(column -> {
-                return new TableCell<Charge, Category>() {
-                    @Override
-                    protected void updateItem(Category category, boolean empty) {
-                        super.updateItem(category, empty);
-
-                        if (empty || category == null) {
-                            setText(null);
-                        } else {
-                            setText(category.getName());
-                        }
-                    }
-                };
+            categoria.setCellFactory(column -> new TableCell<Charge, Category>() {
+                @Override
+                protected void updateItem(Category category, boolean empty) {
+                    super.updateItem(category, empty);
+                    setText(empty || category == null ? null : category.getName());
+                }
             });
-
             categoria.setCellValueFactory(new PropertyValueFactory<>("category"));
             fecha.setCellValueFactory(new PropertyValueFactory<>("date"));
             precio.setCellValueFactory(new PropertyValueFactory<>("cost"));
             unidades.setCellValueFactory(new PropertyValueFactory<>("units"));
             nombre.setCellValueFactory(new PropertyValueFactory<>("name"));
 
-            List<Charge> charges = s;
-            tabla.setItems(FXCollections.observableList(charges));
+            List<Charge> sortedCharges = charges.stream()
+                    .sorted(Comparator.comparing(Charge::getDate).reversed())
+                    .collect(Collectors.toList());
+            tabla.setItems(FXCollections.observableList(sortedCharges));
+
             nuevoGastoPanel.setVisible(false);
             añadirCategoriaPanel.setVisible(false);
             filtroPanel.setVisible(false);
+
             List<Category> categories = acount.getUserCategories();
-            ObservableList<PieChart.Data> datos = FXCollections.observableArrayList();
+            ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
             series1 = new XYChart.Series<>();
-            Map<Month, Double> monthlyExpenses = new HashMap<>();
-            totalMonthlyExpense = 0;
-
+            Map<String, Double> monthlyExpenses = new HashMap<>();
             Map<String, Double> categoryExpenses = new HashMap<>();
+            double totalMonthlyExpense = 0;
 
-            for (Charge charge : charges) {
+            for (Charge charge : sortedCharges) {
                 double cost = charge.getCost();
-                Month month = charge.getDate().getMonth();
+                String month = charge.getDate().getMonth() + " " + String.valueOf(charge.getDate().getYear()).substring(2);
                 monthlyExpenses.put(month, monthlyExpenses.getOrDefault(month, 0.0) + cost);
 
                 totalMonthlyExpense += cost;
@@ -280,12 +277,17 @@ public class MainAppController implements Initializable {
             }
 
             for (Map.Entry<String, Double> entry : categoryExpenses.entrySet()) {
-                datos.add(new PieChart.Data(entry.getKey(), entry.getValue()));
+                pieChartData.add(new PieChart.Data(entry.getKey(), entry.getValue()));
             }
 
+            List<Map.Entry<String, Double>> sortedMonthlyExpenses = monthlyExpenses.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                    .collect(Collectors.toList());
+
             series1.getData().clear();
-            for (Map.Entry<Month, Double> entry : monthlyExpenses.entrySet()) {
-                series1.getData().add(new XYChart.Data<>(entry.getKey().toString(), entry.getValue()));
+            for (Map.Entry<String, Double> entry : sortedMonthlyExpenses) {
+                series1.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
             }
 
             gastoMensual.setTitle("Gasto " + modoGasto + ": " + totalMonthlyExpense + "€");
@@ -293,12 +295,14 @@ public class MainAppController implements Initializable {
             if (!buscarText.isFocused()) {
                 gastoMensual.getData().clear();
                 gastoMensual.getData().addAll(series1);
-                piechart.setData(datos);
+                piechart.setData(pieChartData);
             }
+            System.gc();
         } catch (AcountDAOException | IOException ex) {
             System.err.println(ex);
         }
-    }
+    
+}
 
     @FXML
     private void perfil(ActionEvent event) throws IOException {
@@ -474,6 +478,8 @@ public class MainAppController implements Initializable {
             acount.removeCharge(item);
             
             inicializarTabla(Acount.getInstance().getUserCharges());
+            tabla.getSelectionModel().select(pos.getRow());
+            fechaGasto.setValue(LocalDate.now());
         } catch (AcountDAOException | IOException ex) {
             System.err.println(ex);
         }

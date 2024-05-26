@@ -74,7 +74,16 @@ public class EditarGastoController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        coste.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {
+                coste.setText(oldValue);
+            }
+        });
+        unidadesText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                unidadesText.setText(oldValue);
+            }
+        });
     }
 
     public void setValues(Charge charge) throws AcountDAOException, IOException {
@@ -165,7 +174,9 @@ public class EditarGastoController implements Initializable {
         if (!nombreText.getText().isEmpty()) charge.setName(nombreText.getText());
         if (!descripcion.getText().isEmpty()) charge.setDescription(descripcion.getText());
         charge.setCategory(categoriaText.getValue());
-        if (!coste.getText().isEmpty()) charge.setCost(Double.parseDouble(coste.getText()));
+        if (!coste.getText().isEmpty()) {
+            charge.setCost(Double.parseDouble(coste.getText()));
+        }
         if (!unidadesText.getText().isEmpty()) charge.setUnits(Integer.parseInt(unidadesText.getText()));
         charge.setDate(fechaGasto.getValue());
         if (factura.getImage() != null) charge.setImageScan(factura.getImage());

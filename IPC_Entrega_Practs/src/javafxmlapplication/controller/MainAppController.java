@@ -180,7 +180,7 @@ public class MainAppController implements Initializable {
         } catch (AcountDAOException | IOException ex) {
             System.err.println("Error al cargar la tabla: " + ex);
         }
-        
+
         topText.setText("Bienvendido, " + acount.getLoggedUser().getName());
 
         inicializarGastoPanel();
@@ -194,28 +194,40 @@ public class MainAppController implements Initializable {
         inicializarCategorias();
 
         nombreText.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 25) nombreText.setText(oldValue);
+            if (newValue.length() > 25) {
+                nombreText.setText(oldValue);
+            }
         });
         descripcion.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 25) descripcion.setText(oldValue);
+            if (newValue.length() > 25) {
+                descripcion.setText(oldValue);
+            }
         });
         nombreCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 25) nombreCategoria.setText(oldValue);
+            if (newValue.length() > 25) {
+                nombreCategoria.setText(oldValue);
+            }
         });
         descripcionCategoria.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 25) descripcionCategoria.setText(oldValue);
+            if (newValue.length() > 25) {
+                descripcionCategoria.setText(oldValue);
+            }
         });
         coste.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[0-9]*(\\.\\d{0,2})?")) {
                 coste.setText(oldValue);
             }
-            if (newValue.length() > 25) coste.setText(oldValue);
+            if (newValue.length() > 25) {
+                coste.setText(oldValue);
+            }
         });
         unidadesText.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 unidadesText.setText(oldValue);
             }
-            if (newValue.length() > 25) unidadesText.setText(oldValue);
+            if (newValue.length() > 25) {
+                unidadesText.setText(oldValue);
+            }
         });
         fechaGasto.setValue(LocalDate.now());
 
@@ -318,8 +330,8 @@ public class MainAppController implements Initializable {
         } catch (AcountDAOException | IOException ex) {
             System.err.println(ex);
         }
-    
-}
+
+    }
 
     @FXML
     private void perfil(ActionEvent event) throws IOException {
@@ -479,6 +491,7 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void eliminargasto(ActionEvent event) {
+
         try {
             if (tabla.getSelectionModel().isEmpty()) {
                 Alert alert = new Alert(AlertType.ERROR);
@@ -488,16 +501,26 @@ public class MainAppController implements Initializable {
                 alert.showAndWait();
                 return;
             }
-            
+
             TablePosition pos = tabla.getSelectionModel().getSelectedCells().get(0);
             int row = pos.getRow();
             Charge item = tabla.getItems().get(row);
-            
-            acount.removeCharge(item);
-            
-            inicializarTabla(Acount.getInstance().getUserCharges());
-            tabla.getSelectionModel().select(pos.getRow());
-            fechaGasto.setValue(LocalDate.now());
+
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Eliminar categoría");
+            alert.setHeaderText("Estás seguro de que quieres eliminar este gasto?");
+            alert.setContentText("");
+            alert.getDialogPane().getStylesheets().add(getClass().getResource("../../style/nord-dark.css").toExternalForm());
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                acount.removeCharge(item);
+
+                inicializarTabla(Acount.getInstance().getUserCharges());
+                tabla.getSelectionModel().select(pos.getRow());
+                fechaGasto.setValue(LocalDate.now());
+            }
+
         } catch (AcountDAOException | IOException ex) {
             System.err.println(ex);
         }
@@ -733,7 +756,7 @@ public class MainAppController implements Initializable {
 
     @FXML
     private void eliminarCategoria(ActionEvent event) throws AcountDAOException, IOException {
-        
+
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle("Eliminar categoría");
         alert.setHeaderText("Estás seguro de que quieres eliminar esta categoría?");

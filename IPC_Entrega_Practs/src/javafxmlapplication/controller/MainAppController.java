@@ -750,5 +750,7 @@ public class MainAppController implements Initializable {
     @FXML
     private void tablaClicked(MouseEvent event) {
         nuevoGastoPanel.setVisible(false);
+        añadirCategoriaPanel.setVisible(false);
+        filtroPanel.setVisible(false);
     }
 }
